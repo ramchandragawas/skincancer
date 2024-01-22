@@ -1,0 +1,260 @@
+.embeddedServiceSidebarFormField .uiInput .uiLabel-left > span:not(.required) {
+    color: var(--lwc-colorTextDefault,#1e1e23);
+}
+
+.embeddedServiceHelpButton,
+.embeddedServiceSidebar.modalContainer {
+    z-index: 99998;
+}
+
+.embeddedServiceHelpButton *,
+.embeddedServiceSidebar.modalContainer * {
+    font-family: 'Source Sans Pro';
+    line-height: normal;
+}
+
+.embeddedServiceSidebar.modalContainer button[embeddedService-chatHeader_chatHeader] {
+    font-family: 'Poppins' !important;
+    font-size: 8px;
+}
+
+.embeddedServiceSidebar.modalContainer input[type="text"],
+.embeddedServiceSidebar.modalContainer textarea {
+  font-size: 16px;
+}
+
+.embeddedServiceSidebar div.uiInput.uiInput--default.uiInput--input input[type="radio"] {
+    border-radius: none !important;
+    height: auto !important;
+    font-size: medium !important;
+}
+
+.embeddedServiceSidebar div.uiInput.uiLabel-left.uiLabel p {
+    line-height: 1.5em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    margin-bottom: 30px;
+}
+
+.announcement[embeddedService-chatHeaderAnnouncement_chatHeaderAnnouncement] {
+    color: #f8f8f8;
+}
+
+.embeddedServiceSidebarButton > span.label {
+    font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+}
+
+.embeddedServiceSidebarDialogState #dialogTextTitle {
+    font-weight: 700;
+}
+
+.embeddedServiceHelpButton .helpButton .uiButton {
+    background-color: #2746f8;
+    font-family: 'Poppins';
+}
+
+.embeddedServiceHelpButton .helpButton .uiButton:focus {
+    outline: 1px solid #2746f8;
+}
+
+.eventButton {
+    padding-left: 6px;
+    font-size: 13px;
+}
+
+.acs-breadcrumb-light-link {
+    color: #0e6dcc;
+}
+
+.blue-section {
+    font-size: var(--lwc-esFontSizeTextXSmall, 0.75em);
+    color: black;
+    padding-right: 160px;
+    height: 0px
+}
+
+embeddedservice-chat-header.chatHeaderBranding header.sidebarHeader {
+	background-color: #2746f8;
+}
+
+embeddedservice-chat-header.chatHeaderBranding header.sidebarHeader h2 {
+	font-family: 'Poppins';
+	font-size: 16px;
+	font-weight: 700;
+    color: white;
+}
+
+embeddedservice-chat-header button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+embeddedservice-chat-header button.minimizeButton svg,
+embeddedservice-chat-header button.closeButton svg {
+    width: 20px;
+    height: 20px;
+}
+
+.uiLabel {
+    font-weight: bold;        	
+}
+
+.uiDisclaimer {
+    padding-top: 5px;
+}
+
+.red-required {
+    color:darkred;
+}
+
+.disclaimer-text {
+    font-size: 13px;
+}
+
+.embeddedServiceSidebar .dockableContainer .sidebarBody .offline-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.embeddedServiceSidebar .dockableContainer .sidebarBody .offline-container .offline-header {
+    margin: 0 20px;
+    font-weight: 600;
+}
+
+.embeddedServiceSidebar .dockableContainer .sidebarBody .offline-container .offline-content {
+    margin: 10px;
+    text-align: initial;
+}
+
+.uiOutputRichText { 
+    white-space: pre-wrap !important;
+}
+
+.embeddedServiceLiveAgentStateChatAvatar.isLightningOutContext .agentIconColor0 {
+    background-color: #012169;
+}
+
+.embeddedServiceLiveAgentStateChatPlaintextMessageDefaultUI.chasitor.plaintextContent {
+    background-color: #dce1fe;
+    color: #1a1a1a;
+}
+
+.embeddedServiceLiveAgentStateChatPlaintextMessageDefaultUI.agent.plaintextContent {
+    background-color: #f6f6f6;
+    color: #1a1a1a;
+}
+
+.embeddedServiceLiveAgentStateChatInputFooter .chasitorControls .uiInput {
+    font-weight: normal;
+}
+
+button.startButton.uiButton--default.uiButton.embeddedServiceSidebarButton,
+button.dialogButton.dialog-button-0.uiButton.embeddedServiceSidebarButton,
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton {
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    background-color: #2746f8;
+    border-radius: 4px;
+}
+
+button.startButton.uiButton--default.uiButton.embeddedServiceSidebarButton:hover,
+button.dialogButton.dialog-button-0.uiButton.embeddedServiceSidebarButton:hover,
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton:hover {
+    background-color: #0726D9;
+    border-radius: 4px;
+}
+
+button.startButton.uiButton--default.uiButton.embeddedServiceSidebarButton:focus,
+button.dialogButton.dialog-button-0.uiButton.embeddedServiceSidebarButton:focus,
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton:focus {
+    background-color: #2746F8;
+    text-decoration: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 0px 4px #93C5FD;
+}
+
+button.startButton.uiButton--default.uiButton.embeddedServiceSidebarButton:active,
+button.dialogButton.dialog-button-0.uiButton.embeddedServiceSidebarButton:active,
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton:active {
+    background-color: #051C9E;
+    border-radius: 4px;
+}
+
+button.startButton.uiButton--default.uiButton.embeddedServiceSidebarButton:disabled,
+button.dialogButton.dialog-button-0.uiButton.embeddedServiceSidebarButton:disabled,
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton:disabled {
+    background-color: #CCCCCC;
+    border-radius: 4px;
+}
+
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton {
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    background-color: #fff;
+    border: 1px solid #2746f8;
+    border-radius: 4px;
+}
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton:hover,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton:hover,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton:hover {
+    background-color: #f6f8ff;
+}
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton:focus,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton:focus,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton:focus {
+    text-decoration: none;
+    box-shadow: 0px 0px 0px 4px #93C5FD;
+}
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton:active,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton:active,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton:active {
+    background-color: #DCE1FE
+}
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled {
+    background-color: #fff;
+    border-color: #ccc;
+    color: #222;
+}
+
+button.dialogButton.dialog-button-1.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled .label,
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled .label,
+button.waitingCancelChat.uiButton--inverse.uiButton.embeddedServiceSidebarButton:disabled .label {
+    color: #ccc;
+}
+
+button.endChatButton.closeChatButton.uiButton--default.uiButton.embeddedServiceSidebarButton + 
+button.endChatButton.saveTranscriptButton.uiButton--inverse.uiButton.embeddedServiceSidebarButton {
+    margin-top: 5px;
+}

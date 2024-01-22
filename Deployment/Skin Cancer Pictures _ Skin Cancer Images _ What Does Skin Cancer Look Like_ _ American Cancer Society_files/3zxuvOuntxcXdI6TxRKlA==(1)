@@ -1,0 +1,1988 @@
+if (!(IMI.CustomJS && IMI.CustomJS.customJSisLoaded)) {
+
+    (function () {
+        IMI.CustomJS = {
+            customJSisLoaded: true,
+            data: {},
+            sessionData: {},
+            manualIntercepts: [],
+            activeIntercepts: {},
+            viewCount: 0,
+            afterInterceptsLoaded: function () {
+
+                this.trPoCRun = true;
+                var imm = IMI.CustomJS.mods;
+                imm.interceptLocalStorage.checkAvailability();
+                IMI.CustomJS.debug = IMI.CustomJS.mods.interceptLocalStorage.get('IMI_debug') ? true : false;
+                imm.dataStore.load();
+                imm.dataStore.load('sessionStorage');
+                //imm.multiBannerInit(); //12 June 20 comment out
+
+                //Quickstart Desktop
+                IMI.CustomJS.mods.limitInterceptsFired(1911, 99999999);
+                IMI.CustomJS.mods.quickStartInvite();
+
+                //Hide invite/iframe modal body clicked
+                $("body").click(function () {
+                    $("#_im_banner__3346").hide();
+                    $("#_im_iframe_overlay__3347").hide();
+                });
+            },
+            mods: {
+                limitInterceptsFired: function (interceptId1, interceptId2) {
+                    // if (this.limitFired){
+                    //     return
+                    // } else {
+                    window.newInterceptArr = [];
+                    for (var i = 0; i < IMI.Intercepts.length; i++) {
+                        if (IMI.Intercepts[i].id == interceptId1 || IMI.Intercepts[i].id == interceptId2) {
+                            newInterceptArr.push(IMI.Intercepts[i]);
+                        }
+                    }
+                    IMI.Intercepts = newInterceptArr;
+                    this.limitFired = true;
+                    console.log('limited');
+                    // }
+                },
+                quickStartInvite: function () {
+                    if (this.quickStartInviteRun) {
+                        return
+                    } else {
+
+
+                        this.quickStartInviteRun = true;
+                        console.log("quickStartLoaded");
+                        sessionStorage.setListener = 'false';
+
+                        var arStyles = [
+                            '#_im_iframe_overlay__3347 .iframe-tab-spinner {',
+                            '   display: none !important;',
+                            '}',
+                            '#banner_close {', //moving the close banner option
+                            '    top: 5px !important;',
+                            '    right: 5px !important;',
+                            '    font-size: 10px !important;',
+                            '    width: 20px !important;',
+                            '    height: 20px !important;',
+                            '    border: 0px solid transparent !important;',
+                            '    background-color: #2746F8 !important;',
+                            '    box-shadow: none !important;',
+                            //'    background-image: url(https://mcximplementationengineerstestingsite.com/digital_intercept_demos2.0/times-circle.svg) !important;',
+                            '    background-size: cover !important;',
+                            '}',
+                            '#intercept_close, #intercept_close__3347 {',
+                            '    top: -45px !important;',
+                            '    right: -30px !important;',
+                            '    font-size: 10px !important;',
+                            '    width: 20px !important;',
+                            '    height: 20px !important;',
+                            '    border: 0px solid transparent !important;',
+                            '    background-color: #2746F8 !important;',
+                            '    box-shadow: none !important;',
+                            //'    background-image: url(https://mcximplementationengineerstestingsite.com/digital_intercept_demos2.0/times-circle.svg) !important;',
+                            '    background-size: cover !important;',
+                            '}',
+                            '#_im_banner__3346 {', //moving the banner from the top, centering it in the screen, rounding the edges
+                            '    width: 370px !important;',
+                            '    background: #ffffff !important;',
+                            '    height: 350px !important;',
+                            '    left: 0 !important;',
+                            '    font-size: 13px !important;',
+                            '    bottom: 0 !important;',
+                            '    top: unset !important;',
+                            '    color: #000000 !important;',
+                            '    border-radius: 0px !important;',
+                            '    border: 2px solid lightgrey !important;',
+                            '    padding-top: 4px;',
+                            '    background-size: cover !important;',
+                            //'    background-image: url(https://implementationservicestraining.allegiancetech.com/surveys/images/KUBDCA/Preview/invitebackground.png) !important;',
+                            '}',
+                            '#_im_banner__3346:hover {', //hover box shadow for invite
+                            '    box-shadow: 0px 5px 12px 2px rgba(0, 0, 0, 0.45);',
+                            '}',
+                            '#_im_banner__3346 > div {',
+                            //'    background-image: url(https://mcximplementationengineerstestingsite.com/digital_intercept_demos2.0/InMoment-1-color-white.png) !important;',
+                            '    background-size: 120px !important;',
+                            '    background-repeat: no-repeat !important;',
+                            '    background-position: top !important;',
+                            '}',
+                            '#_im_banner__3346 > div > div.im_banner-text-container {', //spacing around the text
+                            '    margin: 0px 0px 0px !important;',
+                            '    padding: 18px 25px 5px !important;',
+                            '}',
+                            '#subHeaderText {', //styling extra text
+                            '    font-size: 17px !important;',
+                            '    padding: 15px 0px 0px !important;',
+                            '}',
+                            '.im_button-container.im_button-alignment-SIDE_BY_SIDE {', //adding padding at the bottom of the invite
+                            '    padding: 15px 15px 30px !important;',
+                            '    background-color: transparent;',
+                            '}',
+                            '.im_banner-text-and-button-container.im_buttonPosition-BOTTOM {',
+                            '    flex-direction: column;',
+                            '    width: 100% !important;',
+                            '}',
+                            '.quickStartButtons {', //styling the 'buttons' that are added
+                            '    min-width: 55px;',
+                            '    min-height: 33px;',
+                            '    font-size: 14px !important;',
+                            '    color: #FFFFFF !important;',
+                            '    cursor: pointer;',
+                            '    display: flex;',
+                            '    flex-direction: row;',
+                            '    justify-content: center;',
+                            '    align-items: center;',
+                            '    margin: 2px !important;',
+                            '    border-radius: 0px !important;',
+                            '    text-align: CENTER;',
+                            '    background-size: 30px;',
+                            '    background-position: center;',
+                            '    background-repeat: no-repeat;',
+                            '    background: #2746F8;',
+                            '    border: 0px solid #000000 !important;',
+                            '}',
+                            '.quickStartButtons:hover {', //styling the 'buttons' that are added
+                            '    min-width: 55px;',
+                            '    min-height: 33px;',
+                            '    font-size: 14px !important;',
+                            '    color: #FFFFFF !important;',
+                            '    cursor: pointer;',
+                            '    display: flex;',
+                            '    flex-direction: row;',
+                            '    justify-content: center;',
+                            '    align-items: center;',
+                            '    margin: 2px !important;',
+                            '    border-radius: 0px !important;',
+                            '    text-align: CENTER;',
+                            '    background-size: 30px;',
+                            '    background-position: center;',
+                            '    background-repeat: no-repeat;',
+                            '    background: #0726D9;',
+                            '    border: 0px solid #000000 !important;',
+                            '}',
+                            '#intercept_section {',
+                            '    position: fixed !important;',
+                            '    left: 0 !important;',
+                            '    bottom: 0 !important;',
+                            '    top: unset !important;',
+                            '    width: 370px !important;',
+                            '    height: 475px !important;',
+                            '    border: 2px solid lightgrey !important;',
+                            '}',
+                            //'svg {',
+                            //'    fill: #ffffff;',
+                            //'}',
+                            //'svg:hover {',
+                            //'    fill: #12C3AC;',
+                            //'}',
+                            //'svg:active {',
+                            //'    fill: #2F65C9;',
+                            //'    box-shadow: 0px 5px 12px 2px rgb(32 45 206 / 45%);',
+                            //'}',
+                            '#im_button1 {', //spacing and rounding of buttons
+                            '    display: none !important;',
+                            '}',
+                            '#qsLeftHeading, #qsRightHeading {',
+                            '    font-size: 10px !important;',
+                            '    padding: 5px;',
+                            '}',
+                            '#_im_invite_logo {',
+                            '    text-align: center !important;',
+                            '}',
+                            '#_im_invite_logo_img {',
+                            '    width: 113px !important;',
+                            '    height: 68px !important;',
+                            '}',
+                            '.surveyHeaders {',
+                            '    width: 80%;',
+                            '    margin-left: auto !important;',
+                            '    margin-right: auto !important;',
+                            '    font-size: 12px !important;',
+                            '    line-height: 15px !important;',
+                            '    padding-top: 25px;',
+                            '}',
+                            '.surveyHeaderContainerLeft {',
+                            '    float: left;',
+                            '    width: 50%;',
+                            '    text-align: left;',
+                            '}',
+                            '.surveyHeaderContainerRight {',
+                            '    float: left;',
+                            '    width: 50%;',
+                            '    text-align: right;',
+                            '}',
+                            '.surveyHeaders:after {',
+                            '    content: "";',
+                            '    display: table;',
+                            '    clear: both;',
+                            '}',
+                            '#_im_iframe_overlay__3347 {',
+                            '    width: 370px !important;',
+                            '    background: #ffffff !important;',
+                            '    height: 475px !important;',
+                            '    left: 0 !important;',
+                            '    bottom: 0 !important;',
+                            '    top: unset !important;',
+                            '    color: #000000 !important;',
+                            '    border-radius: 0px !important;',
+                            '    padding-top: 4px;',
+                            '    background-size: cover !important;',
+                            '}',
+                            '@media screen and (max-device-width: 900px) and (orientation: landscape) {',
+                            '#_im_banner__3346 {', //moving the banner from the top, centering it in the screen, rounding the edges
+                            '    width: 370px !important;',
+                            '    background: #ffffff !important;',
+                            '    height: 350px !important;',
+                            '    left: 0 !important;',
+                            '    bottom: 0 !important;',
+                            '    top: unset !important;',
+                            '    color: #000000 !important;',
+                            '    border-radius: 0px !important;',
+                            '    padding-top: 4px;',
+                            '    background-size: cover !important;',
+                            '}',
+                            '#_im_iframe_overlay__3347 {',
+                            '    width: 370px !important;',
+                            '    background: #ffffff !important;',
+                            '    height: 437px !important;',
+                            '    left: 0 !important;',
+                            '    bottom: -20px !important;',
+                            '    top: unset !important;',
+                            '    color: #000000 !important;',
+                            '    border-radius: 0px !important;',
+                            '    padding-top: 4px;',
+                            '    background-size: cover !important;',
+                            '}',
+                            '#_im_banner__3346 > div > div.im_banner-text-container {',
+                            '   margin: 0px 0px 0px !important;',
+                            '   padding: 0px 15px 0px !important;',
+                            '}',
+                            '.surveyHeader {',
+                            '   padding-top: 0px !important;',
+                            '}',
+                            '#_im_invite_logo > img {',
+                            '   height: 50px !important;',
+                            '   width: 83px !important;',
+                            '}',
+                            '}',
+                            ''
+                        ].join("");
+                        $('head').append('<style>' + arStyles + '</style>');
+
+                        window.overRideIFrameUrl = function () {
+                            IMI.Classes.Intercept.IFrameVisualType.prototype.triggerVisual = function (visual, intercept) {
+                                var _this = this;
+                                var overlaySec = IMI.InterceptElemRefs.getRef(visual.id, _this, 'overlaySec');
+                                if (IMI.AnimationUtil.isVisible(overlaySec)) {
+                                    return;
+                                }
+                                IMI.AnimationUtil.fadeIn(overlaySec, function () {
+                                    if (overlaySec) {
+                                        var iframe = IMI.InterceptElemRefs.getRef(visual.id, _this, "iframe"),
+                                            qsB = (typeof (qsButton) !== "undefined" ? qsButton : 0);
+                                        visual.url = visual.url.replace(/Q3_NPS\=\d/, "Q3_NPS=" + qsB);
+                                        console.log(visual.url.split('?')[1] ? visual.url.split('?')[1] : '')
+                                        if (iframe) {
+                                            iframe.src = visual.url;
+                                        }
+                                        overlaySec.style.width = "100%";
+                                        overlaySec.style.height = "100%";
+                                        overlaySec.style.display = "block";
+                                        if (!visual.seenSurvey) {
+                                            var eventType = '';
+                                            if (visual.isSubVisual) {
+                                                eventType = 'SUBVISUAL_VIEWED';
+                                                //Fire event for the Parent Visual
+                                                var evt = new CustomEvent(
+                                                    "subvisualTriggeredEvent_" + intercept.id, {
+                                                        "bubbles": true,
+                                                        "cancelable": false
+                                                    });
+                                                document.dispatchEvent(evt);
+                                            } else {
+                                                eventType = 'SURVEY_VIEWED';
+                                            }
+                                            //Log event
+                                            var body = {
+                                                orgId: intercept.orgId,
+                                                visualId: visual.id,
+                                                interceptId: intercept.id,
+                                                visualType: visual.type.name,
+                                                event: eventType,
+                                                userId: IMI.JSUtil.getUserUUID()
+                                            };
+                                            IMI.RestUtil.callService(IMI.Config.host, null, "/intercept/v1/log", "POST", body);
+                                        }
+                                    }
+                                });
+                                // register a click event for iframe dismissal if configured
+                                if (visual.backgroundInteractionEnabled) {
+                                    var clickListener = overlaySec.addEventListener('click', function () {
+                                        if (window.event.srcElement !== "intercept_iframe") {
+                                            IMI.JSUtil.setInterceptClosedCookie();
+                                            IMI.AnimationUtil.fadeOut(overlaySec);
+                                            overlaySec.removeEventListener('click', clickListener);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        overRideIFrameUrl();
+
+                        window.invitedOnURL = window.location.href;
+                        //window.userIdStored = 678910;
+                        sessionStorage.qsButton = 0;
+                        window.qsButton = parseFloat(sessionStorage.qsButton);
+
+                        window.qsButtonClicked = function (num) {
+                            console.log('function called');
+                            window.qsButton = parseFloat(num);
+                            var selectorNum = parseFloat(num) + 1;
+                            var starSelector = "#QSbutton" + selectorNum;
+                            $(starSelector).css({
+                                "fill": "#2F65C9"
+                            });
+                            setTimeout(function () {
+                                $("#im_button1").click();
+                                $("#_im_banner__3346").hide();
+                            }, 800);
+                            /* setTimeout(function () {
+                                var spinner = document.getElementById("iframeTabSpinner__3050");
+                                spinner.remove();
+                            }, 1900); */
+                        }
+
+                        sessionStorage.setListener = 'false';
+                        var addStarButtons = setInterval(function () {
+                            //console.log(sessionStorage.setListener);
+                            if (sessionStorage.setListener == 'false') {
+                                //console.log("adding listener");
+                                //console.log("$('#_im_banner__3346').is(':visible')", $('#_im_banner__3346').is(':visible'));
+                                if ($('#_im_banner__3346').is(':visible')) {
+                                    $('<div id="_im_invite_logo"><img src="https://americancancersociety.allegiancetech.com/surveys/images/TDXYNK/headerlogo.png" width="113px" height="68px"></div>').insertBefore('.im_banner-text-container');
+                                    $('#_im_banner__3346 > div > div.im_banner-text-container').after('<div class="surveyHeaders"><div class="surveyHeaderContainerLeft"><p>Not at all<br/>likely</p></div><div class="surveyHeaderContainerRight"><p>Extremely<br/>likely</p></div></div>');
+                                    $("#_im_banner__3346 > div > div.im_button-container.im_button-alignment-SIDE_BY_SIDE").append("<div id='qsLeftHeading' class=''></div>");
+                                    $("#qsLeftHeading").after("<div id='QSbutton1' class='quickStartButtons' onclick='qsButtonClicked(0)'>1</div>");
+                                    $("#QSbutton1").after("<div id='QSbutton2' class='quickStartButtons' onclick='qsButtonClicked(1)'>2</div>");
+                                    $("#QSbutton2").after("<div id='QSbutton3' class='quickStartButtons' onclick='qsButtonClicked(2)'>3</div>");
+                                    $("#QSbutton3").after("<div id='QSbutton4' class='quickStartButtons' onclick='qsButtonClicked(3)'>4</div>");
+                                    $("#QSbutton4").after("<div id='QSbutton5' class='quickStartButtons' onclick='qsButtonClicked(4)'>5</div>");
+                                    $("#QSbutton5").after("<div id='qsRightHeading' class=''></div>");
+                                    sessionStorage.setListener = 'true';
+
+                                    //begin accessibility for invite modal
+                                    // add all the elements inside modal which you want to make focusable
+                                    const focusableElements =
+                                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                                    const modal = document.querySelector('#_im_banner__3346'); // select the modal by it's id
+
+                                    const firstFocusableElement = modal.querySelectorAll(focusableElements)[0]; // get first element to be focused inside modal
+                                    const focusableContent = modal.querySelectorAll(focusableElements);
+                                    const lastFocusableElement = focusableContent[focusableContent.length - 1]; // get last element to be focused inside modal
+
+
+                                    document.addEventListener('keydown', function (e) {
+                                        let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+
+                                        if (!isTabPressed) {
+                                            return;
+                                        }
+
+                                        if (e.shiftKey) { // if shift key pressed for shift + tab combination
+                                            if (document.activeElement === firstFocusableElement) {
+                                                lastFocusableElement.focus(); // add focus for the last focusable element
+                                                e.preventDefault();
+                                            }
+                                        } else { // if tab key is pressed
+                                            if (document.activeElement === lastFocusableElement) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
+                                                firstFocusableElement.focus(); // add focus for the first focusable element
+                                                e.preventDefault();
+                                            }
+                                        }
+                                    });
+
+                                    firstFocusableElement.focus();
+                                    //end accessibility for invite modal
+
+                                    //$("#_im_banner__3346").attr({'role':'dialog', 'aria-modal':'true'});
+
+                                    //console.log(sessionStorage.setListener);
+                                    $("#_im_banner__3346").css({
+                                        "display": "flex !important"
+                                    });
+                                }
+                            } else if (sessionStorage.setListener == 'true') {
+                                console.log("clearing interval");
+                                clearInterval(addStarButtons);
+                                $("#_im_banner__3346").fadeIn(1800);
+                                $("#_im_banner__3346").css({
+                                    "bottom": "auto"
+                                });
+                            }
+                        }, 10);
+
+                        //Close modal when survey is completed
+
+                        // Create IE + others compatible event handler
+                        var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+                        var eventer = window[eventMethod];
+                        var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+                        // Listen to message from child window
+                        eventer(messageEvent, function (e) {
+                            //console.log('parent received message!:  ', e.data);
+                            if (e.data === 'CloseModal') {
+                                $("#_im_iframe_overlay__3347").hide();
+                            }
+                        }, false);
+
+                        /* window.addEventListener('message', function (e) {
+                            var key = e.message ? 'message' : 'data';
+                            var data = e[key];
+                            console.log(data);
+                            if (data === 'CloseModal') {
+                                $("#_im_iframe_overlay__3347").hide();
+                            }
+                        }, false); */
+                    }
+                },
+                runMultiBannerIntercept: function (settings, force) {
+                    var eventName = 'IMI_overlays';
+
+                    var imm = IMI.CustomJS.mods,
+                        activeIntercepts = IMI.CustomJS.activeIntercepts;
+                    //var runTimers = (document.location.search.indexOf('im_timer=true') > -1) ? true : false;
+                    var runTimers = true;
+                    imm.checkValidInterceptRules(IMI.CustomJS.manualIntercepts);
+                    var aid, shutdown, settingShutdown, settingInterval, interceptBanner, triggerIntercept = false;
+                    if (IMI.CustomJS.manualIntercepts.length) {
+                        imm.iterate('intercepts', IMI.CustomJS.manualIntercepts, function (intercept) {
+                            aid = intercept.id + "_" + intercept.visual.id;
+                            if (!activeIntercepts[aid]) {
+                                activeIntercepts[aid] = {
+                                    'intercept': intercept
+                                };
+                            }
+                            if (typeof (throttle) == 'function') {
+                                imm.iterate('triggerRules', [intercept], function (rule) {
+                                    if (rule.triggerTypeString == 'USERPERCENTAGE' && typeof (throttle) == 'function') {
+                                        activeIntercepts[aid].throttle = throttle();
+                                        shutdown = activeIntercepts[aid].throttle.init(intercept);
+                                        if (shutdown == 'off') {
+                                            activeIntercepts[aid].isTurnedOff = true;
+                                        }
+                                        return "EXIT";
+                                    }
+                                });
+                            }
+                            if (!activeIntercepts[aid].isTurnedOff) {
+                                imm.iterate('array', settings.intercepts, function (setintr) {
+                                    if (setintr.iid == intercept.id && setintr.vid == intercept.visual.id) {
+                                        if (setintr.type == 'shutdown_intercepts_by_settings') {
+                                            settingShutdown = setintr;
+                                        } else if (setintr.type == 'intercept_session_settings') {
+                                            settingInterval = setintr;
+                                        }
+                                        if (intercept.visual && intercept.visual.localizedText && intercept.visual.localizedText.indexOf("_multiStepOverlay_") > -1) {
+                                            interceptBanner = intercept;
+                                        }
+                                        if (interceptBanner && settingShutdown && settingInterval) {
+                                            return "EXIT";
+                                        }
+                                    }
+                                });
+                                if (runTimers && settingShutdown && typeof (shutdownInterceptsBySettings) == 'function') {
+                                    activeIntercepts[aid].shutdownInterceptsBySettings = shutdownInterceptsBySettings();
+                                    shutdown = activeIntercepts[aid].shutdownInterceptsBySettings.init(settingShutdown);
+                                    if (shutdown && shutdown.length) {
+                                        activeIntercepts[aid].isTurnedOff = true;
+                                    }
+
+                                }
+                                if (runTimers && settingInterval && !(IMI.CustomJS.activeIntercepts[aid] && IMI.CustomJS.activeIntercepts[aid].isTurnedOff) && typeof (intervalTimer) == 'function') {
+                                    activeIntercepts[aid].intervalTimer = intervalTimer();
+                                    shutdown = activeIntercepts[aid].intervalTimer.init(settingInterval, eventName);
+                                    if (shutdown) {
+                                        activeIntercepts[aid].isTurnedOff = true;
+                                        imm.modifyTriggers([settingInterval.iid], 'disable', 'will trigger manually');
+                                    }
+                                }
+                                if (interceptBanner && !(activeIntercepts[aid] && activeIntercepts[aid].isTurnedOff) && typeof (modifyBannerIntoOverlay) == 'function') {
+                                    triggerIntercept = true;
+                                    if (runTimers) {
+                                        imm.modifyTriggers([interceptBanner.id], 'disable', 'will trigger manually');
+                                    }
+
+                                    activeIntercepts[aid].modifyBannerIntoOverlay = modifyBannerIntoOverlay();
+
+                                    activeIntercepts[aid].modifyBannerIntoOverlay.init(interceptBanner, eventName);
+                                    if (force) {
+                                        interceptBanner.visual.type.buildVisual(interceptBanner, interceptBanner.visual);
+                                    }
+
+                                }
+                            }
+                        });
+                        if (triggerIntercept) {
+
+                        }
+                    }
+                },
+                getAllCookies: function () {
+                    var c = document.cookie,
+                        _cks = {};
+                    if (c.length > 3) {
+                        for (var a = c.split(";"), i = 0, b = a.length; i < b; i++) {
+                            var v = a[i].split("=");
+                            while (v[0].substring(0, 1) == " ") v[0] = v[0].substring(1, v[0].length);
+                            if (v.length == 2 && !!v[0].match(/IMI\_/i)) _cks[v[0]] = unescape(v[1]);
+                        }
+                    }
+                    return _cks;
+                },
+                getBaseDomain: function () {
+                    var sld = document.domain;
+                    var dp = sld.split(".");
+                    var l = dp.length;
+                    if (l < 2) sld = null;
+                    else if (!isNaN(dp[l - 1]) && !isNaN(dp[l - 2])) sld = null;
+                    else sld = "." + dp[l - 2] + "." + dp[l - 1];
+                    return sld;
+                },
+                setCookie: function (n, v, d, e) {
+                    var de = new Date;
+                    de.setTime(de.getTime() + e * 1000);
+                    document.cookie = n + "=" + escape(v) + ((e == null) ? "" : ("; expires=" + de.toGMTString())) + "; path=/" + ((d == null) ? "" : (";domain=" + d));
+                },
+                dataStore: {
+                    'load': function (type) {
+                        var name = (type == 'sessionStorage') ? 'IMI_info_session' : 'IMI_info';
+                        var data = IMI.CustomJS.mods.interceptLocalStorage.get(name, type);
+                        if (data) {
+                            if (type == 'sessionStorage') {
+                                IMI.CustomJS.sessionData = JSON.parse(data);
+                            } else {
+                                IMI.CustomJS.data = JSON.parse(data);
+                            }
+                        }
+                    },
+                    'save': function (type) {
+                        var name = (type == 'sessionStorage') ? 'IMI_info_session' : 'IMI_info';
+                        if (type == 'sessionStorage') {
+                            data = JSON.stringify(IMI.CustomJS.sessionData);
+                        } else {
+                            data = JSON.stringify(IMI.CustomJS.data);
+                        }
+                        if (data) {
+                            IMI.CustomJS.mods.interceptLocalStorage.save(name, data, type);
+                        }
+                    },
+                    'get': function (type) {
+                        if (type == 'sessionStorage') {
+                            return IMI.CustomJS.sessionData;
+                        } else {
+                            return IMI.CustomJS.data;
+                        }
+
+                    },
+                    'delete': function (type) {
+                        var name = (type == 'sessionStorage') ? 'IMI_info_session' : 'IMI_info';
+                        if (type == 'sessionStorage') {
+                            sessionStorage.removeItem(name);
+                            IMI.CustomJS.sessionData = {};
+                        } else {
+                            localStorage.removeItem(name);
+                            IMI.CustomJS.data = {};
+                        }
+                    }
+                },
+                interceptLocalStorage: {
+                    get: function (name, storageType) {
+                        var storeType = storageType || 'localStorage';
+                        if (this.isLocalStorageEnabled) {
+                            return window[storeType].getItem(name);
+                        } else {
+                            IMI.JSUtil.getCookie(name);
+                        }
+                    },
+                    save: function (name, val, storageType) {
+                        var storeType = storageType || 'localStorage';
+                        if (this.isLocalStorageEnabled) {
+                            window[storeType].setItem(name, val);
+                        } else {
+                            IMI.CustomJS.mods.setCookie(name, val, IMI.CustomJS.mods.getBaseDomain(), 30 * 24 * 60 * 60);
+                        }
+                    },
+                    all: function () {
+                        if (this.isLocalStorageEnabled) {
+                            return localStorage;
+                        } else {
+                            return IMI.CustomJS.mods.getAllCookies();
+                        }
+                    },
+                    checkAvailability: function () {
+                        var testKey = 'test';
+                        var isAvailable = false;
+                        try {
+                            localStorage.setItem(testKey, '1');
+                            localStorage.getItem(testKey);
+                            this.activeStorageType = 'localStorage';
+                            this.isLocalStorageEnabled = true;
+                            isAvailable = true;
+                        } catch (error) {
+                            this.activeStorageType = 'alternateLocalStorageFunc';
+                            this.isLocalStorageEnabled = false;
+                            isAvailable = false;
+                        }
+                        return isAvailable;
+                    },
+                },
+                checkJSExpression: function (rule) {
+                    var expressionValue = false,
+                        expression;
+                    /*
+                    if(rule.triggerResult == true){
+                        expressionValue=true;
+                    }
+                    else
+                    */
+                    if (rule.operator && rule.expression) {
+                        expression = new Function(rule.expression)();
+                        if (rule.operator == "EQUALS" && rule.compareValue == expression) {
+                            expressionValue = true;
+                        } else if (rule.operator == "NOT_EQUALS" && rule.compareValue !== expression) {
+                            expressionValue = true;
+                        } else {
+                            expressionValue = false;
+                        }
+                    }
+                    return expressionValue;
+                },
+                checkUrlCondition: function (rule) {
+                    var found = false;
+                    if (rule.operator === "CONTAINS") {
+                        if (document.URL.indexOf(rule.value) > -1) {
+                            found = true;
+                        }
+                    } else if (rule.operator === "DOES_NOT_CONTAIN") {
+                        if (document.URL.indexOf(rule.value) === -1) {
+                            found = true;
+                        }
+                    }
+                    return found;
+                },
+                /**
+                 * validates the URL and JSEPXRESSION rules within the provided intercepts array
+                 * ver 2.50
+                 */
+                checkValidInterceptRules: function (arrayIntercepts, doOnlyCheck) {
+                    var imm = IMI.CustomJS.mods;
+                    var newRuleGroup;
+                    var isValidRule = false;
+                    var validIntercepts = [];
+
+                    imm.iterate('intercepts', arrayIntercepts, function (intercept) {
+                        removeRuleGroup = [];
+                        newRuleGroup = null;
+                        imm.iterate('triggerRuleGroups', [intercept], function (triggerRuleGroup, index) {
+                            isValidRule = false;
+                            imm.iterate('triggerRules', [triggerRuleGroup], function (triggerRule) {
+                                //check if URL condition is valid
+                                if (triggerRule.triggerTypeString === "URL") {
+                                    isValidRule = imm.checkUrlCondition(triggerRule);
+                                }
+                                //check if JSEXPRESSION condition is valid
+                                else if (triggerRule.triggerTypeString === "JSEXPRESSION") {
+                                    isValidRule = imm.checkJSExpression(triggerRule);
+                                } else if (triggerRule.triggerTypeString === "DEVICETYPE") {
+                                    isValidRule = triggerRule.triggerResult;
+                                }
+                                if (!isValidRule) {
+                                    if (doOnlyCheck && triggerRule.id == 999999) {
+
+                                    } else {
+                                        return "EXIT";
+                                    }
+                                }
+                            });
+                            if (isValidRule) {
+                                newRuleGroup = [triggerRuleGroup]
+                            } else {
+                                return "EXIT";
+                            }
+                        });
+                        if (newRuleGroup) {
+                            if (!doOnlyCheck) {
+                                intercept.trigger.triggerRuleGroups = newRuleGroup.slice(0);
+                            }
+                            validIntercepts.push(intercept);
+                        }
+                    });
+                    if (doOnlyCheck) {
+                        if (validIntercepts.length) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        IMI.CustomJS.manualIntercepts = validIntercepts.slice(0);
+                    }
+                },
+                /**
+                 * loops through an array and executes the callback function on each item of the array
+                 * example uses:
+                 *  loops thru each intercept: iterate('intercepts', IMI.Intercepts, function(intercept){});
+                 *  loops thru each trigger rule: iterate('triggerRules', IMI.Intercepts, function(triggerRule){});
+                 * 
+                 * var 1.50
+                 */
+                iterate: function (type, interceptArray, callback) {
+                    var iterateType = 'intercepts',
+                        status = '';
+                    if (type) {
+                        iterateType = type;
+                    }
+                    var iterateArray = interceptArray;
+                    var ruleArray;
+                    if (iterateType && iterateArray && callback) {
+                        for (var a = 0; a < iterateArray.length; ++a) {
+                            if (iterateType === 'intercepts' || iterateType === 'array') {
+                                status = callback.call(this, iterateArray[a], a);
+                            } else if (iterateType === 'trigger') {
+                                status = callback.call(this, iterateArray[a].trigger, a);
+                            } else if (iterateType === 'triggerRuleGroups' || iterateType === 'triggerRules') {
+                                ruleArray = [];
+                                if (iterateType === 'triggerRuleGroups') {
+                                    if (iterateArray[a].trigger && iterateArray[a].trigger.triggerRuleGroups) {
+                                        ruleArray = iterateArray[a].trigger.triggerRuleGroups;
+                                    } else {
+                                        ruleArray = iterateArray[a];
+                                    }
+                                } else if (iterateType === 'triggerRules') {
+                                    if (iterateArray[a].trigger && iterateArray[a].trigger.triggerRuleGroups) {
+                                        for (var b = 0; b < iterateArray[a].trigger.triggerRuleGroups.length; ++b) {
+                                            ruleArray = ruleArray.concat(iterateArray[a].trigger.triggerRuleGroups[b].triggerRules);
+                                        }
+                                    } else if (iterateArray[a].triggerRules) {
+                                        ruleArray = iterateArray[a].triggerRules;
+                                    } else {
+                                        ruleArray = iterateArray[a];
+                                    }
+
+                                }
+                                for (var c = 0; c < ruleArray.length; ++c) {
+                                    status = callback.call(this, ruleArray[c], c);
+                                    if (status === "EXIT") {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (status === "EXIT") {
+                                break;
+                            }
+                        }
+                    }
+                },
+                /**
+                 * getCustomInterceptSettings - pulls settings out of intercept triggers
+                 * ver 2.10 
+                 */
+                getCustomInterceptSettings: function (override) {
+                    if (IMI.CustomJS.settings && !override) {
+                        return IMI.CustomJS.settings;
+                    }
+
+                    function parseValues(str) {
+                        var vals = {},
+                            sp, sp2, c = 0,
+                            nm, val;
+                        try {
+                            sp = str.split(/,(?!(?:[^[]*\[[^]]*\])*[^[]*\])\s*/)
+                            for (c; c < sp.length; ++c) {
+                                sp2 = sp[c].split("=");
+                                nm = sp2[0];
+                                val = sp2[1];
+                                if (val.indexOf("[") == 0) {
+                                    val = JSON.parse(val);
+                                }
+                                vals[nm] = val;
+                            }
+                        } catch (err) {}
+                        return vals;
+                    }
+                    var addedIntercepts = {};
+                    var ruleTypes = [{
+                        name: 'shutdown_intercepts_for_days'
+                    }, {
+                        name: 'shutdown_intercepts_by_settings'
+                    }, {
+                        name: 'intercept_session_settings'
+                    }];
+                    var imm = IMI.CustomJS.mods;
+                    var settings = {
+                        'intercepts': [],
+                        'ruleTypes': {}
+                    };
+                    var ruleType, ruleValue;
+                    imm.iterate('intercepts', IMI.Intercepts, function (intercept) {
+
+                        imm.iterate('triggerRules', [intercept], function (rule) {
+                            ruleType,
+                            ruleValue = null;
+                            imm.iterate('array', ruleTypes, function (rtype) {
+                                if (rule.triggerTypeString === "JSEXPRESSION" && rule.expression.indexOf(rtype.name) > -1) {
+                                    ruleType = rtype.name;
+                                    ruleValue = rule.compareValue; //rule.triggerResult=true;
+                                    return "EXIT";
+                                }
+                            });
+
+                            if (ruleType && ruleValue !== null) {
+                                if (typeof (ruleType) == 'string' && ruleValue.match(/=|,/)) {
+                                    ruleValue = parseValues(ruleValue);
+                                } else {
+                                    ruleValue = {
+                                        'complete': parseInt(ruleValue)
+                                    };
+                                }
+                                if (intercept.trigger && intercept.trigger.name && intercept.trigger.name.indexOf("__intercept settings") > -1) {
+                                    if (!settings['all']) {
+                                        settings['all'] = [];
+                                    }
+                                    settings['all'].push({
+                                        'type': ruleType,
+                                        'values': ruleValue
+                                    });
+                                } else {
+                                    settings.intercepts.push({
+                                        'iid': intercept.id,
+                                        'vid': intercept.visual.id,
+                                        'type': ruleType,
+                                        'values': ruleValue
+                                    });
+                                    if (IMI.CustomJS.manualIntercepts && !addedIntercepts[intercept.id]) {
+                                        addedIntercepts[intercept.id] = true;
+                                        IMI.CustomJS.manualIntercepts.push(intercept);
+                                    }
+                                }
+
+                            }
+                        });
+                        settings.ruleTypes['shutdown_intercepts_by_value'] = 1;
+                    });
+                    IMI.CustomJS.settings = settings;
+                    return IMI.CustomJS.settings;
+                },
+                customEvents: {
+                    trigger: function (name, payload) {
+                        var customEvent;
+                        if (name && payload) {
+                            customEvent = new CustomEvent(name, {
+                                'detail': payload
+                            });
+                            window.dispatchEvent(customEvent);
+                        }
+                    },
+                    addListener: function (name, callback) {
+                        if (name && callback) {
+                            window.addEventListener(name, callback, false);
+                        }
+                    }
+                },
+                /**
+                 * stops intercept from triggering by adding a new rule that resolves to false. 
+                 * ver 2.00
+                 */
+                modifyTriggers: function (listOfIds, type, message) {
+                    var newRule, expressionValue;
+                    if (type == 'enable') {
+                        expressionValue = "return true;";
+                    } else {
+                        expressionValue = "return false;";
+                    }
+                    var imm = IMI.CustomJS.mods;
+                    var interceptsToModify = [];
+                    if (!listOfIds || listOfIds[0] == 'all') {
+                        interceptsToModify = IMI.Intercepts;
+                    } else {
+                        imm.iterate('array', listOfIds, function (id) {
+                            imm.iterate('intercepts', IMI.Intercepts, function (intercept) {
+                                if (id === intercept.id) {
+                                    interceptsToModify.push(intercept);
+                                }
+                            })
+                        })
+                    }
+                    imm.iterate('intercepts', interceptsToModify, function (intercept) {
+                        imm.iterate('triggerRuleGroups', [intercept], function (ruleGroup) {
+                            newRule = null;
+                            imm.iterate('array', ruleGroup.triggerRules, function (rule) {
+                                if (rule.id == 999999) {
+                                    newRule = rule;
+                                    return "EXIT";
+                                }
+                            });
+                            if (!newRule) {
+                                newRule = {
+                                    triggerType: IMI.TriggerRuleTypes.JSEXPRESSION,
+                                    id: 999999,
+                                    operator: "EQUALS",
+                                    value: true,
+                                    triggerResult: null,
+                                    compareValue: "true",
+                                    triggerTypeString: "JSEXPRESSION",
+                                }
+                                ruleGroup.triggerRules.unshift(newRule);
+                            }
+                            newRule.expression = expressionValue;
+                        });
+                        intercept.disabled = (type == 'enable') ? false : true;
+                        if (message) {
+                            if (!intercept.customMessages) {
+                                intercept.customMessages = [];
+                            }
+                            intercept.customMessages.push(message);
+                        }
+                    });
+                },
+                browserType: (function () {
+                    var ua = navigator.userAgent;
+                    if (!!ua.match(/Android(.*)Chrome\/[.0-9].*Mobile/i)) return 'ChromeAndroid';
+                    else if (!!ua.match(/Android(.*)Chrome\/[.0-9]/i)) return 'ChromeAndroidTablet';
+                    else if (!!ua.match(/\(iPad(.*)CriOS/i)) return 'Chrome_iPad';
+                    else if (!!ua.match(/\(iPhone(.*)CriOS/i)) return 'Chrome_iPhone';
+                    else if (!!ua.match(/\(iPad(.*)Safari/i)) return 'Safari_iPad';
+                    else if (!!ua.match(/\(iPhone(.*)Safari/i)) return 'Safari_iPhone';
+                    else if (!!ua.match(/Chrome/i)) return 'Chrome';
+                    else if (!!ua.match(/Safari/i)) return 'Safari';
+                    else if (!!ua.match(/Firefox/i)) return 'Firefox';
+                    else if (!!ua.match(/MSIE|rv\:/i)) return 'IE';
+                    else if (!!ua.match(/OP/)) return 'Opera';
+                    else return 'unknown';
+                })(),
+                //calculates difference between 2 date strings, in either days or hours
+                //ver 2.00
+                getDateDifference: function (dateStringFirst, dateStringSecond, differenceType) {
+                    if (!(dateStringFirst && dateStringSecond)) {
+                        return null;
+                    }
+
+                    differenceType = differenceType || "days";
+                    var dateFirst = new Date(dateStringFirst);
+                    var dateSecond = new Date(dateStringSecond);
+                    var diffTime, difference;
+                    if (differenceType.match(/^(days|d)/)) {
+                        //hours*minutes*seconds*milliseconds
+                        diffTime = 24 * 60 * 60 * 1000;
+                    } else if (differenceType.match(/^(hours|h)/)) {
+                        //minutes*seconds*milliseconds
+                        diffTime = 60 * 60 * 1000;
+                    } else if (differenceType.match(/^(minutes|min|m)/)) {
+                        //seconds*milliseconds
+                        diffTime = 60 * 1000;
+                    } else if (differenceType.match(/^(seconds|sec|s)/)) {
+                        //milliseconds
+                        diffTime = 1000;
+                    }
+                    if (diffTime) {
+                        difference = Math.round(Math.abs((dateFirst.getTime() - dateSecond.getTime()) / (diffTime)));
+                    }
+                    return difference;
+                }
+            },
+            log: function (str, xtra, showLog) {
+                if (IMI.CustomJS.debug || showLog) {
+                    if (xtra) {
+                        console.log('%c' + str, xtra);
+                    } else {
+                        if (typeof (str) == "string") {
+                            console.log('%c' + str, 'color: #E0E0B6; background: #0137A3;');
+                        } else {
+                            console.log('Object value of:', str);
+                        }
+                    }
+                }
+            }
+        }
+
+        /* BEGIN modifyBannerIntoOverlay */
+        function modifyBannerIntoOverlay() { //<img src="img/logo.png" alt="logo">
+            var data = {};
+            var imm = IMI.CustomJS.mods;
+            var hrefPop = ` javascript:var myPop=window.open("https://www.meekmeek.com/Debenhams/secondView.html","mywin","width=750,height=550");myPop.focus(); `;
+            var cssIMFooter = '#_im_footer *{font-size:12px!important}#_im_footer{font-size:12px!important;background-color:#000;Xbottom:0;Xposition:absolute}._im_footer_rightLinks{padding-top:1.5%;float:right!important}._im_footer_leftLinks{padding-top:1%;float:left!important}._im_footer_leftLinks #_im_footer_copyright{display:inline-block}._im_footer_leftLinks span{display:inline}#_im_footer #privacyPolicy{float:left}#_im_footer{background-color:#000;color:#fff;display:table;max-width:100%;width:100%}#_im_footer a{color:#fff;text-decoration:none;display:inline-block}#_im_footer a:hover{text-decoration:none}#_im_footer a:after{background:#e71836;bottom:-2px;content:\'\';height:1px;left:0;max-width:100%;position:absolute;-webkit-transition:all .4s ease-in-out;transition:all .4s ease-in-out;width:0}.lcl_ar #_im_footer a:after{left:auto;right:0}#_im_footer a:hover:after{width:100%}#_im_footer #_im_footer_links{display:table;margin:0 auto;max-width:966px;padding:25px 0;width:90%}#_im_footer ._im_footer_leftLinks{padding-top:6px}#_im_footer ._im_footer_rightLinks{padding-top:0}#_im_footer #_im_footer_companyLogo{border-radius:0;-moz-border-radius:0;-webkit-border-radius:0;bottom:auto!important;line-height:0;padding:0}#_im_footer #_im_footer_companyLogo img{box-sizing:border-box;height:25px}#_im_footer #_im_footer_companyLogo a:hover:after{width:0}@media all and (max-width:480px){#_im_footer ._im_footer_leftLinks{padding-top:0}#_im_footer ._im_footer_leftLinks #_im_footer_copyright,#_im_footer ._im_footer_leftLinks #_im_footer_privacyPolicy{margin:0 4px 4px 0}}';
+            var htmlIMFooter = ' <div id="_im_footer" role="contentinfo"> <div id="_im_footer_links" role="region"> <div class="_im_footer_leftLinks"> <span id="_im_footer_privacyPolicy"><a target="_blank" tabindex="999" ng-href="http://www.inmoment.com/privacy-policy/" href="http://www.inmoment.com/privacy-policy/"><span ng-bind="pageMessages.privacyPolicyText" class="ng-binding">Privacy Policy</span></a></span><span class="linkSeparator">&nbsp;|</span> <div id="_im_footer_copyright" class="ng-binding">&copy; 2020 InMoment Inc. </div></div><div class="_im_footer_rightLinks"> <div id="_im_footer_companyLogo"> <a href="https://www.inmoment.com/websurvey/2/info" target="_new" tabindex="999"> <img src="https://www.inmoment.com/websurvey/image/inmoment-websurvey.png" alt="Powered by InMoment"> </a> </div></div></div></div>';
+            var cssInvite = '.bbl{padding:10px 35% !important;}#_im_invite_container{display: flex; justify-content: center; width: 100%; /* position: absolute; top: 0px; left: 0px; z-index: 10000; */}#_im_invite{z-index:100;width: 600px; bottom: 0px; visibility: visible;}._im_invite,._im_invite *,._im_invite *::before,._im_invite *::after,._im_invite a:hover,._im_invite a:active{border: 0; margin: 0; padding: 0; border-radius: 0; box-sizing: border-box; float: none; line-height: 1.3; font-family: arial, sans-serif; font-size: 17px; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; text-align: center; text-indent: none; text-justify: auto; text-transform: none; letter-spacing: normal; color:inherit; background-image: none; background-color:transparent; display:block;}._im_invite{position: fixed; visibility: hidden; text-align: center; border: solid 1px #444648; color: #444648; background-color: white;}._im_invite h1{font-size: 26px; font-weight: bold;}._im_invite_header{padding: 10px; background-color: inherit;}._im_invite_header-logo{background-image: url(https://api.smg.com/etrackfiles/Debenhams_Logo.svg); background-position: 50% 50%; background-repeat: no-repeat; background-size: contain; height: 90px; width: 75%;; margin: 0 auto;}#_im_invite_close:active,#_im_invite_close:hover,#_im_invite_close{display: block; position: absolute; top: 10px; right: 10px; height: 24px; width: 24px;}#_im_invite_close svg{fill: #444648;}._im_invite_content{padding: 10px 40px 20px 40px; background-color: inherit; color: inherit;}._im_invite_content-text{padding: 15px 70px 25px 70px;}#_im_invite_no:hover,#_im_invite_yes:hover,#_im_invite_no,#_im_invite_yes{height: 48px; width: 160px; display: inline-block; line-height: 48px;}#_im_invite_no:hover,#_im_invite_no{border: solid 1px #56585a; color: inherit; background-color: inherit;}#_im_invite_yes:hover,#_im_invite_yes{border: solid 1px #00B39E; color: white; background-color: #00B39E; margin-left:15px;}@keyframes etrack-bounceInUp{from, 60%, 75%, 90%, to{animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);}from{opacity: 0; transform: translate3d(0, 2000px, 0);}60%{opacity: 1; transform: translate3d(0, -20px, 0);}75%{transform: translate3d(0, 10px, 0);}90%{transform: translate3d(0, -5px, 0);}to{transform: translate3d(0, 0, 0);}}.etrack-invite-in{animation-duration: 1s; animation-fill-mode: both; animation-name: etrack-bounceInUp;}@keyframes etrack-bounceOutDown{20%{transform: translate3d(0, 10px, 0);}40%, 45%{opacity: 1; transform: translate3d(0, -20px, 0);}to{opacity: 0; transform: translate3d(0, 2000px, 0);}}.etrack-invite-out{animation-duration: 1s; animation-fill-mode: both; animation-name: etrack-bounceOutDown;}@media all and (max-width:600px){#_im_invite{width:96%;}._im_invite_content-text{padding-left:0px; padding-right:0px;}}@media all and (max-width:440px){#_im_invite_no, #_im_invite_yes{width:116px;}}@media all and (max-width:320px){#_im_invite_no, #_im_invite_yes{width:102px;}}._im_bannerOverlay{opacity:1 !important;}' + cssIMFooter;
+            cssInvite += ['@media all and (max-width:600px){#_im_invite ._im_invite_header-logo{width:35%;height:40px;}#_im_invite ._im_invite_header{padding-bottom:0px;}._im_invite *{font-size:14px;}._im_invite h1{font-size:16px;}#_im_invite  #_im_footer{display:none;}#_im_invite  ._im_invite_content-text{padding-top:10px;padding-bottom:15px;}#_im_invite ._im_invite_content{padding-left:20px;padding-right:20px;}}'].join("");
+            var htmlInvite = '<div id="_im_invite_container" style=""> <div id="_im_invite" class="_im_invite" style=""> <div class="_im_invite_header"> <div class="___im_invite_header-logo" aria-label="Debenhams"><img src="img/logo.png" alt="logo" class="bbl" /></div><a href="javascript:void(0);" id="_im_invite_close" class="_im_invite_close"> <svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <polygon fill="#000000" transform="translate(12.000000, 12.000000) rotate(-315.000000) translate(-12.000000, -12.000000) " points="14 10 22 10 22 14 14 14 14 22 10 22 10 14 2 14 2 10 10 10 10 2 14 2"></polygon> </g> </svg> </a> </div><div class="_im_invite_content"> <div class="_im_invite_content-header"> <h1>We\'d like to hear your feedback!</h1> </div><div class="_im_invite_content-text"> <p>We\'re always looking for ways to provide better experiences for our customers. Would you be willing to take our short survey after your visit?</p></div><div class="_im_invite_content-answers"> <a id="_im_invite_no" href="javascript:void(0);" class="_im_invite_no">No, thanks</a><a id="_im_invite_yes" href="javascript:void(0);" class="_im_invite_yes">Yes, I\'ll help</a> </div></div>' + htmlIMFooter + '</div></div>';
+            htmlInvite += '<style>' + cssInvite + '</style>';
+            var scriptReady = `
+                function popMe(){
+                    var myPop=window.open("https://www.meekmeek.com/Debenhams/secondView.html","mywin","width=750,height=550");
+                    myPop.focus();
+                }
+                var simulateClick = function (elem) {
+                    // Create our event (with options)
+                    var evt = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    // If cancelled, don't dispatch our event
+                    //var canceled = !elem.dispatchEvent(evt);
+                    elem.dispatchEvent(evt)
+                };
+
+                window.__myParentIs=window.opener||window.parent;  //Covers parent container for popup first then iframe second
+                window.addEventListener("message", myReceivedMessage, false);
+                var $INM={};
+                $INM.timesMissed=0, $INM.timesThreshhold=2;
+                function myReceivedMessage(event) {
+                    if(event.data && typeof(event.data)==="string" && !!event.data.match(/^\{/)){
+                        var dta=JSON.parse(event.data)
+                        if(dta.inmKeepAlive){
+                            $INM.heardFromParent=true;
+                            $INM.eventData=event;
+                        }
+                    }    
+                }
+            
+                $INM.intrvl = setInterval(function(){
+                    if(!$INM.heardFromParent){
+                        $INM.timesMissed+=1;
+                    }
+                    else{
+                        $INM.timesMissed=0;
+                    }
+                    $INM.heardFromParent=false;
+                    if($INM.timesMissed>$INM.timesThreshhold){
+                        clearInterval($INM.intrvl);
+
+                        
+                        var dWait = document.getElementById("_im_start_wait");
+                        var dReady = document.getElementById("_im_start_ready");
+                        if(dWait && dReady){
+                            dWait.style.display="none";
+                            dReady.style.display="block";
+                        }
+                        
+                        //simulateClick(document.getElementById("_im_start_wait"));
+                        //simulateClick(document.getElementById("im_popup"));
+
+                        //window.focus();
+                        //var myPop=window.open("https://www.meekmeek.com/Debenhams/secondView.html","mywin","width=750,height=550");
+                        //myPop.focus();
+                        //window.close();
+                        
+                    }
+                    else{
+                        if(window.__myParentIs)window.__myParentIs.postMessage(JSON.stringify({thisIsFrom:'Popup',surveyContainer:sc,purpose:'sensingYourExistence'}), "*");
+                    }
+                },1000);
+            
+                var  sc=(window.opener?'popup':window.parent?'iframe':'unknown');
+                window.__myParentIs.postMessage(JSON.stringify({thisIsFrom:'Popup',surveyContainer:sc,purpose:'sensingYourExistence'}), "*");
+                `;
+            var cssReady = '.bbl{padding:10px 35% !important;}._im_start{display: flex; flex-direction: column; justify-content: space-between;}._im_start, ._im_start *, ._im_start *::before, ._im_start *::after, ._im_start a:hover, ._im_start a:active{border: 0; margin: 0; padding: 0; border-radius: 0; box-sizing: border-box; float: none; line-height: 1.3; font-family: arial, sans-serif; font-size: 18px; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; text-align: left; text-indent: none; text-justify: auto; text-transform: none; letter-spacing: normal; color:inherit; background-image: none; background-color:transparent;}#_im_start_ready{display: none;}._im_start{height: 100%; color: #444648; background-color: white; overflow:hidden; min-height:500px; position: absolute; top: 0; left: 0; right: 0; bottom: 0;}._im_start h1{font-size: 28px; font-weight: bold;}._im_start h2{font-weight: bold;}._im_start_header{padding: 10px; background-color: inherit;}._im_start_header-logo{background-image: url(https://api.smg.com/etrackfiles/Debenhams_Logo.svg); background-position: 50% 50%; background-repeat: no-repeat; background-size: contain; height: 90px; width: 75%; margin: 0 auto;}._im_start_content{padding: 10px 40px 20px 40px; background-color: white; color: inherit;}._im_start_content-header{padding:20px 0;}._im_start_content-header>h1{text-align: center}._im_start_content-text{max-width: 650px; margin: 0 auto;}._im_start_content-body{max-width: 650px; margin: 25px auto 50px auto;}._im_start_content-body>p{font-size: 16px; text-align: center;}._im_start_content-text>h2{padding:10px 0;}#_im_start_ready ._im_start_content-text{text-align: center}#_im_start_begin-survey:hover, #_im_start_begin-survey{height: 48px; width: 160px; display: inline-block; line-height: 48px; color: white; border: solid 1px #00B39E; background-color: #00B39E; text-align: center;}._im_start_content-instructions{padding: 0px 20px;}' + cssIMFooter;
+            var htmlReady = '<html> <head><style>' + cssReady + '</style><script>' + scriptReady + '</script></head> <body> <div class="_im_start"> <div class="_im_start_main"> <div class="___im_start_header"> <div class="____im_start_header-logo"><img src="img/logo.png" alt="logo" class="bbl" /> </div></div><div class="_im_start_content" id="_im_start_wait" style="display: block;"> <div class="_im_start_content-header"> <h1>Thank you for agreeing to share your feedback!</h1> </div><div class="_im_start_content-text"> <h2>Please follow these instructions:</h2> <ol class="_im_start_content-instructions"> <li>Keep this window open, the survey will automatically appear in this window after you leave Debenhams.</li><li>Select your main browser to continue your visit at Big Bag.</li><li>Select this window at the conclusion of your visit to complete the survey.</li><li>Note, You may need to return to this window to complete the survey.</li></ol> <h2>We appreciate your feedback. Your input will help us improve Big Bag.</h2> </div></div><div class="_im_start_content" id="_im_start_ready" style="display: none;"> <div class="_im_start_content-header"> <h1>Thank you for agreeing to share your feedback!</h1> </div><div class="_im_start_content-body"> <p>Big Bag and its processor, InMoment, will collect data from your computer and browser, including your IP address and domain, cookie information, and software/hardware attributes. InMoment processes the data collected in the United States. Learn more about InMoment\'s privacy practices below. By beginning the survey, you agree to InMoment\'s use of cookies and other data collection technologies.</p></div><div class="_im_start_content-text"> <a id="_im_start_begin-survey" href="__SURVEY__HREF__">Start Survey</a> </div></div></div>' + htmlIMFooter + ' </div></body></html>';
+
+            function closeOverlay(id, type) {
+                return function () {
+                    imm.customEvents.trigger(data.event_name, {
+                        iid: data.iid,
+                        vid: data.vid,
+                        id: 'modifyBannerIntoOverlay_' + type
+                    });
+                    action('hide');
+                }
+            }
+
+            function action(type, id) {
+                id = data.banner_id || id;
+                var banner = document.getElementById(id);
+                var intercept = data.intercept;
+                if (banner && intercept) {
+                    if (type == 'show') {
+                        imm.modifyTriggers([intercept.id], 'enable');
+                        if (!data.intercept_triggered) {
+                            IMI.InterceptUtil.triggerIntercept.call(IMI.InterceptUtil.triggerIntercept, intercept, new Map);
+                            data.intercept_triggered = true;
+                        } else {
+                            intercept.visual.type.triggerVisual.apply(intercept.visual.type, [intercept.visual, intercept]);
+                        }
+                        //banner.style.display="block";
+                    } else if (type == 'hide') {
+                        intercept.visual.type.unTriggerVisual.apply(intercept.visual.type, [intercept.visual]);
+                        imm.modifyTriggers([intercept.id], 'disable');
+                        //banner.style.display="none";
+                    }
+                }
+            }
+
+            function unload(win) {
+                return function () {
+                    if (win) {
+                        //win.focus();
+                    }
+                }
+            }
+
+            function remakeOverlay(id, url) {
+                data.banner_id = "_im_banner__" + id;
+                var banner = document.getElementById(data.banner_id);
+                var aYes, aNo, aClose;
+                var width, height, top, left;
+                var params = [];
+                if (banner) {
+                    banner.style.display = "none";
+                    banner.className += "_im_bannerOverlay";
+                    banner.innerHTML = htmlInvite;
+                    aYes = banner.querySelector("#_im_invite_yes");
+                    aNo = banner.querySelector("#_im_invite_no");
+                    aClose = banner.querySelector("#_im_invite_close");
+                    width = 800;
+                    height = 500;
+                    left = (screen.width - width) / 2;
+                    top = (screen.geight - height) / 4;
+                    params = ['width=' + width, 'height=' + height, 'left=' + left, 'top=' + top, 'scrollbars=1', 'resizable=1'];
+
+                    if (aYes) {
+                        aYes.addEventListener('click', function () {
+                            var win = window.open("", "surveyReady2", params.join(", "));
+                            win.document.open();
+                            win.document.write(htmlReady.replace("__SURVEY__HREF__", url));
+                            win.document.close();
+                            //window.addEventListener('beforeunload', unload(win))
+                        });
+                        aYes.addEventListener('click', closeOverlay(data.banner_id, 'optin'));
+                    }
+                    if (aNo) {
+                        aNo.addEventListener('click', closeOverlay(data.banner_id, 'optout'));
+                    }
+                    if (aClose) {
+                        aClose.addEventListener('click', closeOverlay(data.banner_id, 'optout'));
+                    }
+                }
+            }
+
+            function init(intercept, eventName) {
+                if (!(intercept && intercept.id && intercept.visual && intercept.visual.id && intercept.visual.type && intercept.visual.type['name'] == 'BANNER')) {
+                    return false;
+                }
+                data.iid = intercept.id;
+                data.vid = intercept.visual.id;
+                data.event_name = eventName;
+                data.intercept = intercept;
+                intercept.visual.customEventName = data.event_name;
+                if (!intercept.visual.type.buildVisual_DEFAULT) {
+
+                    intercept.visual.type.buildVisual_DEFAULT = intercept.visual.type.buildVisual;
+                    intercept.visual.type.buildVisual = function (intr, vis) {
+                        intercept.visual.type.buildVisual_DEFAULT.apply(intercept.visual.type, [intr, vis]);
+                        if (vis.customEventName) {
+                            remakeOverlay(vis.id, vis.url);
+                            IMI.CustomJS.mods.customEvents.trigger(vis.customEventName, {
+                                iid: intr.id,
+                                vid: vis.id,
+                                id: 'modifyBannerIntoOverlay_START'
+                            });
+                        }
+                    }
+                }
+            }
+            return {
+                init: init,
+                action: action
+            }
+        }
+        /* END modifyBannerIntoOverlay */
+
+        /* BEGIN intervalTimer */
+        function intervalTimer() {
+            var data = {},
+                settings = {},
+                interval = 1000,
+                intercept_data = null,
+                started = false,
+                lastAction, isPaused = false,
+                timerRunning = false,
+                lastStatus;
+            var timespent, display, times, pause;
+            var imm = IMI.CustomJS.mods;
+
+            function action(type) {
+                if (type == 'start' && !started) {
+                    timerRunning = true;
+                    setTimeout(function () {
+                        _timer();
+                    }, 2000);
+                    started = true;
+                } else if (type == 'pause') {
+                    isPaused = true;
+                    timerRunning = false;
+                    lastAction = 'close';
+                    eventPayload('close');
+                } else if (type == 'unpause') {
+                    isPaused = false;
+                    //if(lastAction == 'paused'){
+                    //  eventPayload('open');
+                    if (!timerRunning) {
+                        timerRunning = true;
+                        _timer();
+                    }
+                    //}
+                } else if (type == 'stop') {
+                    intercept_data.done = true;
+                }
+            }
+
+            function eventPayload(status) {
+                lastVisual = status;
+                var payload = {
+                    iid: settings.iid,
+                    vid: settings.vid,
+                    id: 'intervalTimer_' + status
+                };
+                imm.customEvents.trigger(settings.event_name, payload);
+            }
+
+            function done() {
+                imm.dataStore.save('sessionStorage');
+            }
+
+            function calcTimes() {
+                var keepRunning = true;
+                var elapsed = intercept_data.elapsed_time,
+                    shown = intercept_data.times_shown;
+                var status;
+
+                if (shown >= times) {
+                    intercept_data.done = true;
+                    keepRunning = false;
+                    eventPayload('finish');
+                } else {
+
+                    if (elapsed >= timespent && elapsed < (timespent + display)) {
+                        status = 'open';
+
+                    } else if ((elapsed > timespent + ((display + pause) * shown)) && (elapsed < timespent + display + ((pause + display) * shown))) {
+                        status = 'open';
+
+                    } else {
+                        status = 'close';
+
+                    }
+                    if (lastAction !== status && elapsed > timespent) {
+                        lastAction = status;
+                        eventPayload(lastAction);
+                    }
+                    if (lastStatus == 'open' && status == 'close') {
+                        intercept_data.times_shown++;
+                    }
+                }
+                lastStatus = status;
+                return keepRunning;
+            }
+
+            function _timer() {
+                if (intercept_data.done) {
+                    done();
+                    return;
+                } else if (isPaused) {
+                    // lastAction='paused';
+                    return;
+                }
+                intercept_data.elapsed_time++;
+                var keepTimerRunning = calcTimes();
+
+                if (keepTimerRunning) {
+                    setTimeout(_timer, interval);
+                    done();
+                } else {
+                    done();
+                }
+
+            }
+
+            function init(config, eventName) {
+                if (!(config && config.iid && config.vid && config.values)) {
+                    return false;
+                }
+
+                var isShutdown = false;
+
+                data = imm.dataStore.get('sessionStorage');
+                settings = config;
+                settings.event_name = eventName;
+                if (data && data.intercepts) {
+                    imm.iterate('array', data.intercepts, function (intr) {
+                        if (intr.iid == settings.iid && intr.vid == settings.vid) {
+                            intercept_data = intr;
+                            return "EXIT";
+                        }
+                    });
+                }
+                if (!intercept_data) {
+                    if (!data.intercepts) {
+                        data.intercepts = [];
+                    }
+                    intercept_data = {
+                        iid: settings.iid,
+                        vid: settings.vid
+                    };
+                    data.intercepts.push(intercept_data);
+                }
+
+                if (typeof (intercept_data.elapsed_time) == 'undefined') {
+                    intercept_data.elapsed_time = 0;
+                }
+                if (typeof (intercept_data.times_shown) == 'undefined') {
+                    intercept_data.times_shown = 0;
+                }
+                if (intercept_data.done || intercept_data.times_shown >= settings.values.times) {
+                    isShutdown = true;
+                }
+                timespent = parseInt(settings.values.timespent);
+                display = parseInt(settings.values.display);
+                times = parseInt(settings.values.times);
+                pause = parseInt(settings.values.pause);
+
+                done();
+                //window.addEventListener('beforeunload', done);
+                return isShutdown;
+            }
+            return {
+                init: init,
+                action: action
+            }
+        }
+        /* END intervalTimer*/
+
+        /* BEGIN shutdownInterceptsBySettings ver 2.00 */
+        //ver 2.00
+        function shutdownInterceptsBySettings() {
+            var e = "IMI_shutdown",
+                t = IMI.CustomJS.mods;
+
+            function i(e) {
+                var t, i, s, n, a = e ? e.detail : null,
+                    l = IMI.CustomJS.mods,
+                    r = l.dataStore.get();
+                if (a && ("INITIAL" == (n = a.message_id) || "COMPLETE" == n || "OPT_OUT" == n || "NON_OFFER" == n || "OPT_IN" == n)) {
+                    if (t = a.intercept_id, i = a.visual_id, !t || !i) return;
+                    r.intercepts || (r.intercepts = []), r.intercepts && l.iterate("array", r.intercepts, function (e, n) {
+                        if (e.iid == t && e.vid == i) return s = e, "EXIT"
+                    }), s || (s = {
+                        iid: t,
+                        vid: i
+                    }, r.intercepts.push(s)), "INITIAL" == n || "OPT_OUT" == n || "NON_OFFER" == n ? ("NON_OFFER" == n ? s.dt_ignore = (new Date).getTime() : s.dt_initial = (new Date).getTime(), s.dt_complete && delete s.dt_complete) : "COMPLETE" != n && "OPT_IN" != n || (s.dt_complete = (new Date).getTime()), l.dataStore.save()
+                }
+            }
+
+            function s(t, i) {
+                "set" == t ? IMI.CustomJS.mods.setCookie(e, (new Date).getTime(), IMI.CustomJS.mods.getBaseDomain(), i) : "erase" == t && IMI.CustomJS.mods.setCookie(e, "", IMI.CustomJS.mods.getBaseDomain(), -1)
+            }
+            return {
+                init: function (n) {
+                    var a, l, r, o = t.dataStore.get(),
+                        u = n || t.getCustomInterceptSettings(),
+                        d = [],
+                        m = [];
+                    if (u && u.all && u.all.length) {
+                        if (a = u.all, l = "all", u.all[0] && u.all[0].values && 0 == u.all[0].values.complete) return s("erase"), IMI.CustomJS.log("setting is off, EXIT"), !1;
+                        if (u.all, r = !1, IMI.JSUtil.getCookie(e) && (r = !0), r) return t.modifyTriggers(["all"], "disable"), IMI.CustomJS.log("COOKIE FOUND stop everything and EXIT"), !0
+                    } else u.intercepts && u.intercepts.length ? a = u.intercepts : u && (a = [u]);
+                    return t.iterate("array", a, function (e) {
+                        "all" == l && (e.values && e.values.intercepts && "all" == e.values.intercepts || (e.values || (e.values = {}), e.values.intercepts = "all")), "shutdown_intercepts_for_days" != e.type && "shutdown_intercepts_by_settings" != e.type || m.push(e)
+                    }), m.length && o && o.intercepts && o.intercepts.length && (d = function (e, i) {
+                        var n, a, l, r, o, u = [];
+                        return t.iterate("array", e, function (e) {
+                            if (t.iterate("array", i, function (i) {
+                                    if (a = l = "", r = "days", (e.iid == i.iid && e.vid == i.vid || "all" == i.values.intercepts) && i.values && (e.dt_complete && i.values.optin ? (a = "dt_complete", l = "optin") : e.dt_initial && i.values.optout ? (a = "dt_initial", l = "optout") : e.dt_ignore && i.values.nonoffer ? (a = "dt_ignore", l = "nonoffer") : e.dt_complete && i.values.complete ? (a = "dt_complete", l = "complete") : e.dt_initial && i.values.initial && (a = "dt_initial", l = "initial"), a && l))
+                                        if (r = i.values.time || i.values.format || r, n = t.getDateDifference(e[a], (new Date).toString(), r), IMI.CustomJS.log("checking <" + l + "> time for id " + e.iid + ", time difference is: " + n + " " + r), n <= parseInt(i.values[l])) {
+                                            if (i.values.intercepts && "all" == i.values.intercepts) return u = ["all"], "days" == r ? o = 60 * i.values.complete * 60 * 24 : "minutes" == r ? o = 24 * i.values.complete : "seconds" == r && (o = i.values.complete), s("set", o), IMI.CustomJS.log(o + " " + r + " is within range, TURN OFF all intercepts"), "EXIT";
+                                            i.values.intercepts && (u.push(i.values.intercepts.slice(0)), IMI.CustomJS.log(i.values[l] + " " + r + " is within range, TURN OFF intercept:" + i.values.intercepts)), u.push(e.iid), IMI.CustomJS.log(i.values[l] + " " + r + " is within range, TURN OFF intercept:" + e.iid)
+                                        } else IMI.CustomJS.log(i.values[l] + " " + r + " is out of range, PROCEED with intercept:" + e.iid), t.dataStore.delete('sessionStorage'), n > i.values[l] && delete e[a]
+                                }), "all" == u[0]) return "EXIT"
+                        }), u.length && t.modifyTriggers(u, "disable", "shut off due to shutdown_intercepts_by_value rule"), u
+                    }(o.intercepts, m)), !u.skipMessenger && "all" !== d[0] && m.length && "function" == typeof messengerParent && (IMI.CustomJS.messenger || (IMI.CustomJS.messenger = messengerParent(), IMI.CustomJS.messenger.init({
+                        origins: ["www.inmoment.com", "feedback.inmoment.com"],
+                        messages: {
+                            INITIAL: {
+                                message_id: "INITIAL",
+                                message: "send visual id",
+                                reply: "true",
+                                triggerEvent: !0,
+                                tracking: ["COMPLETE"]
+                            }
+                        },
+                        page: "parent"
+                    })), IMI.CustomJS.messenger.addCustomEventListener(i)), t.dataStore.save(), d
+                },
+                sendMessage: function (e) {
+                    i({
+                        detail: e
+                    })
+                }
+            }
+        }
+        /* END shutdownInterceptsBySettings */
+
+        /* BEGIN throttle */
+        /**
+         * determines if intercepts should be throttled then sets LOCAL storage with the throttle value
+         * ver 2.00 TP
+         * 
+         */
+        function throttle() {
+            var data = {},
+                intercept_data = null;
+            var imm = IMI.CustomJS.mods;
+            var saveType = '';
+            /**
+             * determines if visitor is throttled by generating random number
+             * 
+             * @param {number} num  percentage to be throttled, should be from 0 to 100
+             * 
+             * @return {boolean} true if throttled, false if not
+             */
+            function throttle(num) {
+                var run = true;
+                if (num < 100) {
+                    num = num * 10;
+                    run = (Math.floor(Math.random() * 1000) < num);
+                }
+                return run;
+            }
+
+            /**
+             * checks intercept rules for USERPERCENTAGE, then determines if intercept should be throttled
+             * 
+             * @param {object} intercept 
+             * 
+             * @return {string} returns "on" if not throttled, "off" if throttled
+             */
+            function checkThrottle(intercept) {
+                var val, throttleVal = "on";
+                imm.iterate('triggerRules', [intercept], function (triggerRule) {
+                    if (triggerRule.triggerTypeString === "USERPERCENTAGE") {
+                        val = parseInt(triggerRule.value);
+                        if (val) {
+                            if (triggerRule.operator === "EXCLUDE" && val < 100) {
+                                val = 100 - val;
+                            }
+                            throttleVal = throttle(val);
+                            if (throttle(val)) {
+                                throttleVal = 'on';
+                            } else {
+                                throttleVal = 'off';
+                            }
+                            //find the original intercept with this rule
+                            imm.iterate('intercepts', IMI.Intercepts, function (originalIntercept) {
+                                //change the value of the original throttle rule to either 100 ("on") or 0 ("off")
+                                if (intercept.id === originalIntercept.id) {
+                                    imm.iterate('triggerRules', [originalIntercept], function (originalRule) {
+                                        if (originalRule.triggerTypeString === "USERPERCENTAGE") {
+                                            if (throttleVal === "on") {
+                                                if (originalRule.operator === "INCLUDE") {
+                                                    originalRule.value = 100;
+                                                    triggerRule.value = 100;
+                                                } else if (originalRule.operator === "EXCLUDE") {
+                                                    originalRule.value = 0;
+                                                    triggerRule.value = 0;
+                                                }
+
+                                            } else if (throttleVal === "off") {
+                                                if (originalRule.operator === "INCLUDE") {
+                                                    originalRule.value = 0;
+                                                    triggerRule.value = 0;
+                                                } else if (originalRule.operator === "EXCLUDE") {
+                                                    originalRule.value = 100;
+                                                    triggerRule.value = 100;
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+
+                            });
+                        }
+                        return "EXIT";
+                    }
+                });
+                return throttleVal;
+            }
+
+            function save() {
+                if (imm.dataStore) {
+                    imm.dataStore.save(saveType);
+                }
+            }
+            /**
+             * initilization function starts the entire throttle process, this is the only function that needs to be called
+             * 
+             * @param {array} intercepts  array of intercepts with USERPERCENTAGE rule
+             * 
+             * @return {array} intercepts that are not throttled
+             */
+            function init(intercept) {
+                if (!intercept && intercept.id && intercept.visual && intercept.visual.id) {
+                    return false;
+                }
+                var status;
+                var iid = intercept.id,
+                    vid = intercept.visual.id;
+                data = imm.dataStore.get(saveType);
+                if (data && data.intercepts) {
+                    imm.iterate('array', data.intercepts, function (intr) {
+                        if (intr.iid == iid && intr.vid == vid) {
+                            intercept_data = intr;
+                            return "EXIT";
+                        }
+                    });
+                }
+                if (!intercept_data) {
+                    if (!data.intercepts) {
+                        data.intercepts = [];
+                    }
+                    intercept_data = {
+                        iid: iid,
+                        vid: vid
+                    };
+                    data.intercepts.push(intercept_data);
+                }
+                if (intercept_data) {
+                    if (intercept_data.status) {
+                        status = intercept_data.status;
+                    } else {
+                        status = checkThrottle(intercept);
+                        intercept_data.status = status;
+                    }
+
+                }
+                save();
+
+                return status;
+            }
+            return {
+                'init': init
+            }
+        }
+        /* END throttle */
+    })();
+
+    /* BEGIN IM_SurveyFatigue */
+    //ver 3.00
+    function IM_SurveyFatigue(config) {
+        this.local_storage_name = 'IMI_info';
+        this.session_storage_name = 'IMI_info_session';
+        this.storage_type = 'localStorage';
+        this.storage_name = 'IMI_info';
+        this.events = [];
+        this.event_name = 'SurveyFatigue';
+        this.rule_name = 'survey_fatigue';
+        this.shutdownIds = [];
+
+        if (config) {
+            for (var name in config) {
+                if (typeof (this[name]) != 'undefined') {
+                    this[name] = config[name];
+                }
+            }
+        }
+
+        if (this.storage_type == 'sessionStorage') {
+            this.storage_name = this.session_storage_name;
+        }
+    }
+
+    IM_SurveyFatigue.prototype = (function () {
+        function getSavedData() {
+            var data = null;
+            if (window[this.storage_type]) {
+                data = window[this.storage_type].getItem(this.storage_name);
+            }
+            if (data) {
+                data = JSON.parse(data);
+            }
+            if (!data) {
+                data = {};
+            }
+            return data;
+        }
+
+        function saveData(data) {
+            if (data) {
+                if (window[this.storage_type]) {
+                    data = JSON.stringify(data);
+                    window[this.storage_type].setItem(this.storage_name, data);
+                }
+            }
+        }
+
+        function _log(s) {
+            if (IMI.CustomJS && IMI.CustomJS.log) {
+                IMI.CustomJS.log(s);
+            }
+            console.log(s);
+        }
+
+        function parseValues(str) {
+            var vals = {},
+                sp, sp2, c = 0,
+                nm, val;
+            try {
+                sp = str.split(/,(?!(?:[^[]*\[[^]]*\])*[^[]*\])\s*/);
+
+                for (c; c < sp.length; ++c) {
+                    sp2 = sp[c].split("=");
+                    nm = sp2[0];
+                    val = sp2[1];
+                    if (val.indexOf("[") == 0) {
+                        val = JSON.parse(val);
+                    }
+                    vals[nm] = val;
+                }
+            } catch (err) {}
+            return vals;
+        }
+        //pulls fatigue settings out of admin console
+        function getSettings(arrayOfIntercepts) {
+            var settings = {
+                'intercepts': [],
+                'ruleTypes': {}
+            };
+
+            var ruleType, ruleValue;
+            var data = arrayOfIntercepts || IMI.Intercepts;
+            var x, y, z, s, intercept, rule;
+            var done = false;
+            for (x = 0; x < data.length; ++x) {
+                intercept = data[x];
+                if (!intercept.disabled) {
+                    for (y = 0; y < intercept.trigger.triggerRuleGroups.length; ++y) {
+                        for (z = 0; z < intercept.trigger.triggerRuleGroups[y].triggerRules.length; ++z) {
+                            ruleType = ruleValue = null
+                            rule = intercept.trigger.triggerRuleGroups[y].triggerRules[z];
+                            if (rule.triggerTypeString == "JSEXPRESSION") {
+                                if (rule.expression.indexOf(this.rule_name) > -1) {
+                                    ruleType = this.rule_name;
+                                    ruleValue = rule.compareValue;
+                                }
+                            }
+                            if (ruleType !== null && ruleValue !== null) {
+                                if (typeof (ruleType) == 'string' && ruleValue.match(/=|,/)) {
+                                    ruleValue = this.parseValues(ruleValue);
+                                } else {
+                                    ruleValue = {
+                                        'complete': parseInt(ruleValue)
+                                    };
+                                }
+
+                                if (intercept.trigger && intercept.trigger.name && intercept.trigger.name.indexOf("__intercept settings") > -1) {
+                                    if (!settings['all']) {
+                                        settings['all'] = {};
+                                    }
+                                    settings['all'].type = ruleType;
+                                    settings['all'].values = ruleValue;
+                                    done = true;
+                                } else {
+                                    settings.intercepts.push({
+                                        'iid': intercept.id,
+                                        'vid': intercept.visual.id,
+                                        'type': ruleType,
+                                        'values': ruleValue
+                                    });
+                                }
+                                settings.ruleTypes[ruleType] = 1;
+                            }
+                            if (done) {
+                                break;
+                            }
+                        }
+                        if (done) {
+                            break;
+                        }
+                    }
+                    if (done) {
+                        break;
+                    }
+                }
+            }
+            return settings;
+        }
+
+        function action(payload) {
+            var i_id, v_id, objInt, mId, x;
+            var data = this.getSavedData.call(this);
+            if (payload) {
+                mId = payload['message_id'] || payload['action_id'];
+                if (mId == "INITIAL" || mId == "COMPLETE" || mId == "OPT_OUT" || mId == "NON_OFFER" || mId == "OPT_IN") {
+
+                    i_id = payload['intercept_id'];
+                    v_id = payload['visual_id'];
+                    if (!(i_id && v_id)) {
+                        return;
+
+                    }
+                    if (!data['intercepts']) {
+                        data['intercepts'] = [];
+                    }
+                    if (data['intercepts']) {
+                        for (x = 0; x < data['intercepts'].length; ++x) {
+                            obj = data['intercepts'][x];
+                            if (obj['iid'] == i_id && obj['vid'] == v_id) {
+                                objInt = obj;
+                                break;
+                            }
+                        }
+                    }
+                    if (!objInt) {
+                        objInt = {
+                            'iid': i_id,
+                            'vid': v_id,
+                        }
+                        data['intercepts'].push(objInt);
+                    }
+                    if (mId == "INITIAL" || mId == "OPT_OUT" || mId == "NON_OFFER") {
+                        if (mId == "NON_OFFER") {
+                            objInt['dt_ignore'] = new Date().getTime()
+                        } else {
+                            objInt['dt_initial'] = new Date().getTime()
+                        }
+                    } else if (mId == "COMPLETE" || mId == "OPT_IN") {
+                        objInt['dt_complete'] = new Date().getTime()
+                    }
+                    saveData.call(this, data);
+                }
+            }
+
+        }
+        //receives message from survey and passes it to action function
+        function receivePostMessage(event) {
+            var payload;
+            if (event.data && typeof (event.data) === "string") {
+                try {
+                    payload = JSON.parse(event.data);
+                } catch (err) {
+                    payload = null;
+                }
+                if (payload) {
+                    if (payload['message_id'] == 'INITIAL' || payload['message_id'] == "COMPLETE") {
+                        this.action(payload);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        function addMessageListeners() {
+            window.addEventListener("message", receivePostMessage.bind(this), false);
+        }
+
+        function getDateDifference(dateStringFirst, dateStringSecond, differenceType) {
+            if (!(dateStringFirst && dateStringSecond)) {
+                return null;
+            }
+
+            differenceType = differenceType || "days";
+            var dateFirst = new Date(dateStringFirst);
+            var dateSecond = new Date(dateStringSecond);
+            var diffTime, difference;
+            if (differenceType.match(/^(days|d)/)) {
+                //hours*minutes*seconds*milliseconds
+                diffTime = 24 * 60 * 60 * 1000;
+            } else if (differenceType.match(/^(hours|h)/)) {
+                //minutes*seconds*milliseconds
+                diffTime = 60 * 60 * 1000;
+            } else if (differenceType.match(/^(minutes|min|m)/)) {
+                //seconds*milliseconds
+                diffTime = 60 * 1000;
+            } else if (differenceType.match(/^(seconds|sec|s)/)) {
+                //milliseconds
+                diffTime = 1000;
+            }
+            if (diffTime) {
+                difference = Math.round(Math.abs((dateFirst.getTime() - dateSecond.getTime()) / (diffTime)));
+            }
+            return difference;
+        }
+
+        //disables intercepts by adding custom false rule
+        //enables intercepts by removing custom false rule
+        function enableOrDisableIntercepts(type) {
+            var newRule, ruleGroup, expressionValue;
+            if (type == 'enable') {
+                expressionValue = "return true;";
+            } else {
+                expressionValue = "return false;";
+            }
+            for (var i_int = 0; i_int < IMI.Intercepts.length; ++i_int) {
+                for (var i_trg = 0; i_trg < IMI.Intercepts[i_int].trigger.triggerRuleGroups.length; ++i_trg) {
+                    ruleGroup = IMI.Intercepts[i_int].trigger.triggerRuleGroups[i_trg];
+                    if (ruleGroup.triggerRules[0].id == 9999991) {
+                        newRule = ruleGroup.triggerRules[0];
+                    } else {
+                        newRule = {
+                            triggerType: IMI.TriggerRuleTypes.JSEXPRESSION,
+                            id: 9999991,
+                            operator: "EQUALS",
+                            value: true,
+                            triggerResult: null,
+                            compareValue: "true",
+                            triggerTypeString: "JSEXPRESSION",
+                        }
+
+                        ruleGroup.triggerRules.unshift(newRule);
+                    }
+                    newRule.expression = expressionValue
+                }
+                IMI.Intercepts[i_int].disabled = (type == 'enable') ? false : true;
+            }
+
+        }
+        //parses through data_intercepts to determine if survey fatigue (in settings) criteria is met
+        function setShutdown(data_intercepts, settings) {
+            var timeStored, timeSetting, format;
+            var dateDiff, stopIds = [],
+                timeStored, timeSetting, format, val, settingIsOff, info;
+
+            for (var i_di = 0; i_di < data_intercepts.length; ++i_di) {
+                info = data_intercepts[i_di];
+
+                timeStored = timeSetting = '', settingIsOff = false, dateDiff = null;
+                format = 'days';
+                if (settings && settings.values) {
+                    if (info.dt_complete && settings.values.optin) {
+                        timeStored = 'dt_complete', timeSetting = 'optin';
+                    } else if (info.dt_initial && settings.values.optout) {
+                        timeStored = 'dt_initial', timeSetting = 'optout';
+                    } else if (info.dt_ignore && settings.values.nonoffer) {
+                        timeStored = 'dt_ignore', timeSetting = 'nonoffer';
+                    } else if (info.dt_complete && settings.values.complete) {
+                        timeStored = 'dt_complete', timeSetting = 'complete';
+                    } else if (info.dt_initial && settings.values.initial) {
+                        timeStored = 'dt_initial', timeSetting = 'initial';
+                    }
+                    if (timeStored && timeSetting) {
+                        if (settings.values[timeSetting] == 'off') {
+                            settingIsOff = true;
+                        }
+                        format = settings.values.time || settings.values.format || format;
+                        if (!settingIsOff) {
+
+                            dateDiff = getDateDifference(info[timeStored], new Date().toString(), format);
+                            this.log('checking <' + timeSetting + '> time for intercept[' + info.iid + '], time difference is: ' + dateDiff + ' ' + format);
+                        } else {
+                            this.log('checking <' + timeSetting + '> time for intercept[' + info.iid + '], no timeframe check, turn OFF completely');
+                        }
+
+                        if (settingIsOff || (dateDiff !== null && dateDiff <= parseInt(settings.values[timeSetting]))) {
+
+                            if (!settingIsOff) {
+                                val = settings.values[timeSetting];
+                                this.log(dateDiff + ' ' + format + ' is within range of setting:' + settings.values[timeSetting] + ' ' + format + ', TURN OFF all intercepts');
+                            } else {
+                                val = 'OFF';
+                                this.log('Setting is ' + settings.values[timeSetting] + ', TURN OFF all intercepts');
+                            }
+                            setShutdownValue.call(this, 'set', (val + format), timeStored);
+                            enableOrDisableIntercepts('disable');
+
+                        } else {
+                            this.log(dateDiff + ' ' + format + ' is out of range for setting:' + settings.values[timeSetting] + ' ' + format + ', PROCEED with intercept:' + info.iid);
+                            if (dateDiff > settings.values[timeSetting]) {
+                                delete info[timeStored];
+                            }
+                        }
+                    }
+                }
+            }
+            return stopIds;
+        }
+
+        function setShutdownValue(type, time, storageName) {
+            var data = this.getSavedData.call(this);
+
+
+            if (type == 'set') {
+                if (!data) {
+                    data = {};
+                }
+                if (!data.all) {
+                    data.all = {};
+                }
+                if (!data.all[storageName]) {
+                    data.all[storageName] = time;
+                }
+            } else if (data && type == 'erase') {
+                if (data.intercepts) {
+                    for (var x = 0; x < data.intercepts.length; ++x) {
+                        for (var name in data.intercepts[x]) {
+                            if (name.indexOf("dt_") == 0) {
+                                delete data.intercepts[x][name];
+                            }
+                        }
+                    }
+                }
+                if (data.all) {
+                    for (var name in data.all) {
+                        if (name.indexOf("dt_") == 0) {
+                            delete data.all[name];
+                        }
+                    }
+                }
+            }
+            this.saveData.call(this, data);
+        }
+        //initilize survey fatigue settings either by passing in a comma separated string OR will pull the settings out of the admin console
+        //customSettings format = initial=TIME,complete=TIME,format=s|m|h|d (seconds, minutes, hours, days);
+        function init(customSettings) {
+
+            this.addMessageListeners();
+
+
+
+            let customSettingObj = null;
+            if (typeof (customSettings) == 'string') {
+                if (customSettings.match(/=|,/)) {
+                    customSettingObj = {
+                        all: {
+                            type: this.rule_name,
+                            values: this.parseValues(customSettings)
+                        }
+                    }
+
+                }
+            }
+
+            var data = this.getSavedData.call(this);
+
+            //if settings aren't passed to init, then pull it out of the admin console
+            var settings = customSettingObj || getSettings.call(this);
+            if (settings && settings.all && settings.all && settings.all.values && data && data['intercepts'] && data['intercepts'].length) {
+                this.shutdownIds = setShutdown.call(this, data['intercepts'], settings.all);
+
+            }
+            this.saveData.call(this, data);
+            return this.shutdownIds;
+        }
+        return {
+            parseValues: parseValues,
+            getSettings: getSettings,
+            addMessageListeners: addMessageListeners,
+            log: _log,
+            getSavedData: getSavedData,
+            saveData: saveData,
+            action: action,
+            init: init
+        }
+    })();
+    /* END IM_SurveyFatigue */
+
+}

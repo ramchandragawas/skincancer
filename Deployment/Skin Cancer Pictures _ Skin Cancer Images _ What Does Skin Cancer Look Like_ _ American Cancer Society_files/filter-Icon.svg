@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.53" height="17" viewBox="0 0 23.53 17">
+  <g id="filter-Icon" transform="translate(0.001 -2)">
+    <g id="Item" transform="translate(21.999 14) rotate(90)">
+      <line id="Line_126" data-name="Line 126" x2="20" transform="translate(2.5) rotate(90)" fill="none" stroke="#1e1e23" stroke-linecap="round" stroke-width="1.5"/>
+      <circle id="Ellipse_15" data-name="Ellipse 15" cx="2.5" cy="2.5" r="2.5" transform="translate(5 11.78) rotate(90)" fill="#1e1e23"/>
+    </g>
+    <g id="Item-2" data-name="Item" transform="translate(22.999 8) rotate(90)">
+      <line id="Line_128" data-name="Line 128" x2="19.78" transform="translate(2.5 1.22) rotate(90)" fill="none" stroke="#1e1e23" stroke-linecap="round" stroke-width="1.5"/>
+      <circle id="Ellipse_17" data-name="Ellipse 17" cx="2.5" cy="2.5" r="2.5" transform="translate(5) rotate(90)" fill="#1e1e23"/>
+    </g>
+    <g id="Item-3" data-name="Item" transform="translate(22.779 2) rotate(90)">
+      <line id="Line_128-2" data-name="Line 128" x2="19.78" transform="translate(2.5) rotate(90)" fill="none" stroke="#1e1e23" stroke-linecap="round" stroke-width="1.5"/>
+      <circle id="Ellipse_17-2" data-name="Ellipse 17" cx="2.5" cy="2.5" r="2.5" transform="translate(5 17.78) rotate(90)" fill="#1e1e23"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,362 @@
+// local object to maintain state between functions
+var client_country_name = undefined
+var sf_chat_state = {
+    available: false
+}
+
+// initialize chat service
+var initialize_chat = function () {
+    embedded_svc.settings.devMode = false;
+    embedded_svc.settings.displayHelpButton = true;
+    embedded_svc.settings.isOfflineSupportEnabled = false;
+    embedded_svc.settings.defaultAssistiveText = 'Live Chat:';
+    embedded_svc.settings.defaultMinimizedText = 'Live Chat';
+    embedded_svc.settings.disabledMinimizedText = 'Live Chat';
+    embedded_svc.settings.loadingText = 'Loading...';
+    embedded_svc.settings.language = '';
+    embedded_svc.settings.widgetWidth = "400px"
+
+    var details = []
+    details.push({ "label": "Subject", "transcriptFields": ["Chat_Subject__c"] })
+    details.push({ "label": "Email", "transcriptFields": ["Chat_Email__c"] })
+    details.push({ "label": "First Name", "transcriptFields": ["First_Name__c"] })
+    details.push({ "label": "Last Name", "transcriptFields": ["Last_Name__c"] })
+    embedded_svc.settings.extraPrechatFormDetails = details
+    embedded_svc.settings.extraPrechatInfo = [{
+        "entityFieldMaps": [{
+            "doCreate": true,
+            "doFind": true,
+            "fieldName": "LastName",
+            "isExactMatch": true,
+            "label": "Last Name"
+        }, {
+            "doCreate": true,
+            "doFind": true,
+            "fieldName": "FirstName",
+            "isExactMatch": true,
+            "label": "First Name"
+        }, {
+            "doCreate": true,
+            "doFind": true,
+            "fieldName": "Email",
+            "isExactMatch": true,
+            "label": "Email"
+        }],
+        "entityName": "Contact",
+        "saveToTranscript": ""
+    }];
+
+    embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+    embedded_svc.settings.entryFeature = 'LiveAgent';
+
+    // check when feature is loaded
+    // in this case we only care about the LiveAgent feature
+    // at this point we know the LiveAgent has been initialized
+    embedded_svc.addEventHandler('featureLoaded', function (data) {
+        if (data !== 'LiveAgent')
+            return
+
+        // override the "updateButton" function with our new logic
+        embedded_svc.liveAgentAPI.updateButton = function (status) {
+            sf_chat_state.available = status
+            var settings = embedded_svc.settings
+            if (!status) {
+                settings.disabledMinimizedText = 'Live Chat Offline'
+                embedded_svc.isButtonDisabled = false
+                embedded_svc.setHelpButtonText(settings.disabledMinimizedText)
+            } else {
+                settings.disabledMinimizedText = settings.defaultMinimizedText
+                embedded_svc.isButtonDisabled = false
+                embedded_svc.setHelpButtonText(settings.defaultMinimizedText)
+            }
+        }
+    })
+
+    // handle the minimize to make sure the button text is correct
+    // this can also be where we check for additional state changes
+    // while the chat window is minimized
+    embedded_svc.addEventHandler('afterMinimize', function () {
+        var assistive_text = document.getElementById('chatButtonAssistiveText')
+        if (!assistive_text)
+            return
+        
+        var message = assistive_text.parentElement.querySelector('.minimizedText .message')
+        if (!message)
+            return
+
+        var status = sf_chat_state.available
+        var settings = embedded_svc.settings
+        message.innerHTML = (!status) ? settings.disabledMinimizedText :  settings.defaultMinimizedText
+    })
+
+    embedded_svc.addEventHandler('afterMaximize', function () {
+        // code for when chat has been maximized
+    })
+
+    // handle the chat destroy to make sure the button text is correct
+    // important to note; everything is removed and deleted upon destroy
+    embedded_svc.addEventHandler('afterDestroy', function () {
+        // code for when chat has been destroyed
+        var status = sf_chat_state.available
+        var settings = embedded_svc.settings
+        if (!status) {
+            settings.disabledMinimizedText = 'Live Chat Offline'
+            embedded_svc.isButtonDisabled = false
+            embedded_svc.setHelpButtonText(settings.disabledMinimizedText)
+        } else {
+            settings.disabledMinimizedText = settings.defaultMinimizedText
+            embedded_svc.isButtonDisabled = false
+            embedded_svc.setHelpButtonText(settings.defaultMinimizedText)
+        }
+    })
+
+    // replace the DOMNodeInserted logic with the "ready" function
+    // this is much more reliable and does not require any additional
+    // logic to ensure the "DOMNodeInserted" was the sales force chat
+    embedded_svc.addEventHandler('ready', function () {
+        if (sf_chat_state.available)
+            handle_prechat_form()
+        else
+            handle_offline_form()
+    })
+};
+
+// body of the original DOMNodeInserted code
+// simply generate the pre-chat form and check if client is from a valid country
+function handle_prechat_form() {
+    var start_button = document.querySelector('button.embeddedServiceSidebarButton.startButton')
+    if (start_button) {
+        var start_button_label = start_button.querySelector('span.label');
+        if (start_button_label)
+            start_button_label.innerHTML = 'Start Live Chat';
+
+        start_button.disabled = true
+    }
+
+    var serviceFeature = document.querySelector('div.sidebarBody');
+    if (serviceFeature) {
+        serviceFeature.addEventListener('DOMNodeInserted', function (evt) {
+            var startButton = serviceFeature.querySelector('button.dialog-button-0.uiButton')
+            if (startButton && startButton.innerText.indexOf('New Chat') !== -1)
+                startButton.parentNode.removeChild(startButton);
+
+            if((navigator.appVersion.indexOf("iPhone") != -1) || (navigator.appVersion.indexOf("iPad") != -1)) {
+                var menuOption = document.querySelector('div.footerMenuWrapper');
+                if (menuOption)
+                    menuOption.parentNode.removeChild(menuOption);
+
+                var btnSelector = document.querySelector('div.endChatContainer');
+                if (btnSelector)
+                {
+                    var startButton = btnSelector.querySelector('button.saveTranscriptButton');                
+                    startButton.parentNode.removeChild(startButton);  
+                }
+            }
+        })
+    }
+
+    (new Promise(get_browser_region)
+        .then(function (country) {
+            generate_chat_form();
+
+            var country_valid = valid_country(country);
+            if (!country_valid) {
+                var invalid_country = document.createElement("div");
+                invalid_country.setAttribute('id', 'countryName');
+                invalid_country.style.height = '300px';
+                invalid_country.className = "customError";
+                invalid_country.innerHTML = "*Thank you for contacting the American Cancer Society. We are unable to respond to questions from outside the United States. However, we encourage you to search cancer.org for resources and information. In addition, you may want to reach out to a cancer society within your country. The Union for International Cancer Control (UICC) offers an international directory of member cancer institutes and organizations through their website at <a class='acs-breadcrumb-light-link' target='_blank' href='https://www.uicc.org/membership'>https://www.uicc.org/membership</a>";
+
+                var button_wrappers = document.getElementsByClassName('buttonWrapper')
+                if (button_wrappers && button_wrappers.length)
+                    button_wrappers[0].insertBefore(invalid_country)
+
+                var containers = document.getElementsByClassName('showDockableContainer');
+                if (containers && containers.length)
+                    containers[0].style.height = '680px';
+
+                var content = document.querySelector('div.formContent.embeddedServiceSidebarForm')
+                if (content) {
+                    content.style.visibility = 'hidden'
+                    content.style.display = 'none'
+                }
+            
+                var button = document.querySelector('div.buttonWrapper.embeddedServiceSidebarForm > button')
+                if (button) {
+                    button.style.visibility = 'hidden'
+                    button.style.display = 'none'
+                }
+            }
+
+            var queue_one = document.getElementById("queue1");
+            if (queue_one)
+                queue_one.addEventListener("change", handle_checkbox.bind(this, queue_one, country_valid));
+            var queue_two = document.getElementById("queue2");
+            if (queue_two)
+                queue_two.addEventListener("change", handle_checkbox.bind(this, queue_two, country_valid));
+        })
+    )
+}
+
+// called when no agent is available
+// hide the chat form and button
+// remember, when the chat window is destroyed everything is deleted
+// so this becomes a safe operation as it will be recreated
+// keep the elements around incase we need to show them upon state change (future iteration)
+function handle_offline_form() {
+    generate_offline_form()
+    
+    var content = document.querySelector('div.formContent.embeddedServiceSidebarForm')
+    if (content) {
+        content.style.visibility = 'hidden'
+        content.style.display = 'none'
+    }
+
+    var button = document.querySelector('div.buttonWrapper.embeddedServiceSidebarForm')
+    if (button) {
+        button.style.visibility = 'hidden'
+        button.style.display = 'none'
+    }
+}
+
+// consolidate the "CheckBoxFun" logic
+function handle_checkbox(element, valid) {
+    var start_button = document.querySelector('button.embeddedServiceSidebarButton.startButton')
+    if (!start_button)
+        return 
+    
+    if (valid && element.checked)
+        start_button.disabled = false;
+}
+
+function valid_country(country) {
+    if (!country)
+        return false
+
+    var valid_list = [].concat(window.valid_country_list || ['United States'])
+    return (valid_list.indexOf(country) !== -1)
+}
+
+function get_browser_region(resolve, reject) {
+    if (!window.geoip2) {
+        reject()
+        return
+    }
+
+    if (client_country_name && client_country_name !== null) {
+        resolve(client_country_name)
+        return
+    }
+
+    geoip2.country(
+        function (data) {
+            client_country_name = data.country.names.en
+            resolve(client_country_name)
+        },
+        function (err) {
+            console.log('Geo Error -> ', err)
+            reject(err)
+        })
+}
+
+// generate the rasio button_wrappers
+// added a "name" to allow the browser native function of toggle
+function generate_checkbox_input(id, value, text) {
+    var input = document.createElement("input")
+    input.type = "radio"
+    input.name = "question-type"
+    input.id = id
+    input.value = value
+    input.className = "check-box-class"
+
+    var input_text = document.createElement("span")
+    input_text.className = "eventButton"
+    input_text.innerHTML = text
+
+    var wrapper = document.createElement("div")
+    wrapper.className = "uiInput uiInput--default uiInput--input"
+    wrapper.appendChild(input)
+    wrapper.appendChild(input_text)
+
+    var container = document.createElement("div")
+    container.className = "inputEmail embeddedServiceSidebarFormField eventDiv"
+    container.appendChild(wrapper)
+
+    return container
+}
+
+// generate the pre-chat form
+// include the disclaimer as well (no need to seperate into multiple calls)
+function generate_chat_form() {
+    var field_lists = document.getElementsByClassName('fieldList')
+    var sidebar_form = document.querySelector("div.prechatUI.embeddedServiceLiveAgentStatePrechatDefaultUI div.buttonWrapper.embeddedServiceSidebarForm")
+    if (!field_lists || !field_lists.length)
+        return
+
+    var field_list = field_lists[0]
+
+    var text = document.createElement("p")
+    text.className = "blue-section"
+    text.innerHTML = "<span class='red-required'>*</span>How can we help you today?"
+    var text_wrapper = document.createElement("div")
+    text_wrapper.className = "embeddedServiceSidebarFormField uiInput uiLabel-left uiLabel"
+    text_wrapper.appendChild(text)
+    field_list.insertBefore(text_wrapper)
+
+    var cancer_input = generate_checkbox_input('queue1', 'cancer', 'I have a Cancer related question')
+    field_list.appendChild(cancer_input)
+    if (sidebar_form)
+        sidebar_form.insertBefore(document.createElement('div'))
+
+    var donate_input = generate_checkbox_input('queue2', 'donation', 'I have a Donation, Event or Volunteer related question')
+    field_list.appendChild(donate_input)
+    if (sidebar_form)
+        sidebar_form.insertBefore(document.createElement('div'))
+
+    var d_text = document.createElement("span")
+    d_text.className = "disclaimer-text"
+    d_text.innerHTML = "Your chat may be monitored or recorded for training and quality assurance purposes. The American Cancer Society cares about and protects your privacy. The information you provide to the Society will only be used as described in our privacy policy, which is available on <a href='https://cancer.org/privacy' target='_blank'>cancer.org/privacy</a> or by request. Please hold for the next available specialist. <br /> Para consultas en español, llame al 800.227.2345."
+
+    var d_wrapper = document.createElement("div")
+    d_wrapper.className = "uiDisclaimer uiInput uiInput--default uiInput--input"
+    d_wrapper.appendChild(d_text)
+
+    var d_entry = document.createElement("li");
+    d_entry.className = "disclaimer-Check embeddedServiceSidebarFormField"
+    d_entry.appendChild(d_wrapper)
+
+    field_list.appendChild(d_entry)
+    if (sidebar_form)
+        sidebar_form.insertBefore(document.createElement('div'))
+}
+
+// generate the offline message
+function generate_offline_form() {
+    var prechat = document.querySelector('div.prechatUI.embeddedServiceLiveAgentStatePrechatDefaultUI')
+    if (!prechat)
+        return
+    
+    var header = document.createElement('div')
+    header.className = 'offline-header'
+    header.innerHTML = 'American Cancer Society - Live Chat Offline'
+
+    var content = document.createElement('div')
+    content.className = 'offline-content'
+    content.innerHTML = 'Unfortunately, our specialists are currently unavailable on Live Chat.'
+
+    var hours_content = document.createElement('div')
+    hours_content.className = 'offline-content'
+    hours_content.innerHTML = 'Live Chat is normally available Monday-Friday, 7AM to 6:30PM Central Time, outside of holidays.'
+
+    var call_content = document.createElement('div')
+    call_content.className = 'offline-content'
+    call_content.innerHTML = 'If Live Chat is offline and you need assistance, please call 800.227.2345, 24 hours a day, 7 days a week.'
+
+    var simple = document.createElement('div')
+    simple.className = 'offline-container'
+    simple.appendChild(header)
+    simple.appendChild(content)
+    simple.appendChild(hours_content)
+    simple.appendChild(call_content)
+    prechat.appendChild(simple)
+}
